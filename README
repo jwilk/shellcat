@@ -1,4 +1,4 @@
-shellcat, version 0.06
+shellcat, version 0.07
 ----------------------
 
 License:
@@ -6,52 +6,26 @@ License:
 
 ChangeLog:
 
-8 Aug 2001
-  -- found the idea of ShellCAT
+3 Apr 2005, version 0.07
+  -- standard input is not blocked any more   
 
-10 Aug 2001, version 0.00a
-  -- started to write portions of code
+24 Aug 2004, version 0.06
+  -- fixed buggy behaviour with files not ending with '\n'
+     or some other special character
+  -- support for busybox shell, thanks to Simon Poole
+  -- solved problems with backslashes, backticks and 
+     chars '\000'...'\037', '\177'...'\377'
+  -- works with busybox ash, dash, bash, ksh, zsh :=)
+  -- support for TinyCC: just do `make TCC=1'
 
-15 Aug 2001, version 0.00b
-  -- first running version
+5 Aug 2004, version 0.05-pre
+  -- ignore #!... directive in the first line, 
+     thanks to Simon Poole
+  -- C99 conformance
 
-16 Aug 2001, version 0.00c
-  -- now arguments are passed into the ShellCAT script
-
-17 Aug 2001, version 0.00d
-  -- fixed a bug with escaping
-  -- first version without really serious bugs
-
-18 Aug 2001, version 0.00e
-  -- made some speed improvement
-
-19 Aug 2001, version 0.00f
-  -- fixed minor bugs
-
-21 Aug 2001, version 0.00g
-  -- fixed minor bugs
-
-22 Aug 2001, version 0.00h
-  -- now ShellCAT does not create any files while executing script
-
-23 Aug 2001, version 0.01
-  -- corrected `lang.inc.c'
-  -- added some error handling
-  -- now you can specify shell different than default
-  -- fixed some minor bugs
-
-25 Aug 2001, version 0.01a
-  -- now sequences `<$-' and `-$>' have special meanings
-  -- added some error handling
-
-29 Aug 2001, version 0.01b
-  -- added some error handling
-
-30 Aug 2001, version 0.02
-  -- fixed minor bugs
-
-13 Dec 2002, version 0.03
-  -- now using automake and autoconf
+10 Aug 2004, version 0.05
+  -- cosmetic changes
+  -- written some comments
 
 2 Jan 2004, version 0.04
   -- removed automake and autoconf :=)
@@ -61,22 +35,52 @@ ChangeLog:
   -- fixed minor bugs
   -- written nice `Makefile'
 
-5 Aug 2004, version 0.05-pre
-  -- ignore #!... directive in the first line, 
-     thanks to Simon Poole
-  -- C99 comformance
+13 Dec 2002, version 0.03
+  -- use automake and autoconf
 
-10 Aug 2004, version 0.05
-  -- cosmetic changes
-  -- written some comments
+30 Aug 2001, version 0.02
+  -- fixed minor bugs
 
-24 Aug 2004, version 0.06
-  -- fixed buggy behavior with files not ending with '\n'
-     or some other special character
-  -- support for busybox shell, thanks to Simon Poole
-  -- solved problems with backslashes, backticks and 
-     chars '\000'...'\037', '\177'...'\377'
-  -- works with busybox ash, dash, bash, ksh, zsh :=)
-  -- support for TinyCC: just do `make TCC=1'
+29 Aug 2001, version 0.01b
+  -- added some error handling
+
+25 Aug 2001, version 0.01a
+  -- sequences `<$-' and `-$>' have special meanings
+  -- added some error handling
+
+23 Aug 2001, version 0.01
+  -- corrected the language file
+  -- added some error handling
+  -- now you can specify shell different than default
+  -- fixed some minor bugs
+
+22 Aug 2001, version 0.00h
+  -- don't create any files while executing script
+
+21 Aug 2001, version 0.00g
+19 Aug 2001, version 0.00f
+  -- fixed minor bugs
+
+18 Aug 2001, version 0.00e
+  -- made some speed improvement
+
+17 Aug 2001, version 0.00d
+  -- fixed a bug with escaping
+  -- first version without really serious bugs
+
+16 Aug 2001, version 0.00c
+  -- arguments are passed into the ShellCAT script
+
+15 Aug 2001, version 0.00b
+  -- first running version
+
+10 Aug 2001, version 0.00a
+  -- started to write portions of code
+
+8 Aug 2001
+  -- found the idea of ShellCAT
+
+
+3 Apr 2004, version 0.07
 
 # vim:tw=76

@@ -1,14 +1,17 @@
-VERSION   = $(shell cat VERSION)
-DISTFILES = Makefile COPYING README VERSION scat.c
+VERSION = $(shell sed -ne "1 s/^.* \([0-9.]\+\)$$/\\1/gp" < README)
+FAKEROOT = $(shell command -v fakeroot 2>/dev/null)
+DISTFILES = Makefile COPYING README scat.c
 
+CFLAGS_def := -DLARGEBUFFER
+CFLAGS_def += -DVERSION='"$(VERSION)"'
 ifndef TCC
-  CC = gcc
-  CFLAGS_opt = -Os -s
-  CFLAGS_std = -std=gnu99 -pedantic -Wall
+	CC = gcc
+	CFLAGS_opt = -Os -s
+	CFLAGS_std = -std=gnu99 -pedantic -Wall
 else
-  CC = tcc
+	CC = tcc
 endif
-CFLAGS = $(CFLAGS_opt) $(CFLAGS_std) -DLARGEBUFFER -DVERSION=\"$(VERSION)\"
+CFLAGS = $(CFLAGS_opt) $(CFLAGS_std) $(CFLAGS_def)
 
 all: scat
 
@@ -16,13 +19,11 @@ scat: scat.c
 	$(CC) $(CFLAGS) scat.c -o scat
             
 clean:
-	rm -f scat
+	rm -f scat scat-*.tar.*
 
-distclean:
-	rm -f scat-$(VERSION).tar.*
+dist:
+	$(FAKEROOT) tar -cjf scat-$(VERSION).tar.bz2 $(DISTFILES)
 
-dist: distclean
-	fakeroot tar cf scat-$(VERSION).tar $(DISTFILES)
-	bzip2 -9 scat-$(VERSION).tar
+.PHONY: all clean dist
 
-.PHONY: all clean distclean dist
+# vim:ts=4
