@@ -1,3 +1,4 @@
+char* lstrErrMemAlloc = "allocating memory";
 char* lstrOptions = "Options";
 char* lstrShellCat = "ShellCAT";
 char* lstrUsage = "Usage";

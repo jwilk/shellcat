@@ -1,0 +1,35 @@
+30 Aug 2001
+  * -= VERSION 0.02 RELEASED =-
+29 Aug 2001
+  * added some error handling
+25 Aug 2001
+  * now sequences `<$-' and `-$>' have special meanings
+  * added some error handling
+24 Aug 2001
+  * changed format of CHANGELOG from plain text to XML-like
+23 Aug 2001
+  * corrected `lang.inc.c'
+  * added some error handling
+  * now you can specify shell different than default
+  * fixed some minor bugs
+  * -= VERSION 0.01 RELEASED =-
+22 Aug 2001
+  * now ShellCAT does not create any files while executing script
+21 Aug 2001
+  * fixed some minor bugs
+19 Aug 2001
+  * fixed some minor bugs
+18 Aug 2001
+  * made some speed improvement
+17 Aug 2001
+  * fixed bug with escaping
+  * first version without really serious bugs
+16 Aug 2001
+  * now arguments are passed into the ShellCAT script
+15 Aug 2001
+  * first running version
+10 Aug 2001
+  * started to write portions of code
+8 Aug 2001
+  * found the idea of ShellCAT
+

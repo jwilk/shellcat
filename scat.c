@@ -1,6 +1,6 @@
 /* sc.c ::: main program    --*
- * -- version:  A0021       --*
- * -- modified: 23 Aug 2001 --*/
+ * -- version:  A0026       --*
+ * -- modified: 25 Aug 2001 --*/
 
 #include <stdio.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #define fprint(f,s,l) fwrite(s,sizeof(char),l,f)
 #define xerror(s) { fprintf(stderr,"%s: %s: %s\n",argv[0],s,strerror(errno)); _exit(errno); }
 
-char* strVer = "0.01.00";
+char* strVer = "0.02.00";
 
 void showUsage(char* progname)
 {
@@ -25,7 +25,7 @@ void showUsage(char* progname)
     fprintf(stderr,"  -s, --shell=NEWSHELL   %s\n",lstrUsageOptShell);
     fprintf(stderr,"  -h, --help             %s\n",lstrUsageOptHelp);
     fprintf(stderr,"  -v, --version          %s\n",lstrUsageOptVersion);
-    fprintf(stderr,"\n");
+    fprint(stderr,"\n",1);
 }
 
 void showVersion(void)
@@ -38,8 +38,7 @@ int main(int argc, char** argv)
     static char fFShell[cMINIBUFSIZE] = "sh";
     static int fFVersion = 0;
     static int fFHelp    = 0;
-
-    
+  
     while(1)
     {      
         static struct option fOptions[]=
@@ -77,9 +76,9 @@ int main(int argc, char** argv)
     }
 
     if (fFVersion)
-      showVersion();
+        showVersion();
     else if (fFHelp || optind>=argc)
-      showUsage(*argv);
+        showUsage(*argv);
     else
     {
         int fCode;
@@ -99,12 +98,18 @@ int main(int argc, char** argv)
         fseek(fInput,0,SEEK_END);
         fSize=ftell(fInput);
         fseek(fInput,0,SEEK_SET);
-        fBuffer=(char*)calloc(fSize+1,sizeof(char));
-        fread(fBuffer,fSize,1,fInput);
+        fBuffer=(char*)calloc(fSize+2,sizeof(char));
+        if (fBuffer==NULL)
+            xerror(lstrErrMemAlloc)
+        memset(fBuffer,0,fSize+2);
+        fread(fBuffer,sizeof(char),fSize,fInput);
         fclose(fInput);
                 
         fOutput = popen(fFShell,"w");
-        fprint(fOutput,"set - ",4);
+        if (fOutput == NULL)
+            xerror(fFShell);
+            
+        fprint(fOutput,"set - ",6);
         while(optind<argc)
         {
             char* x=argv[optind++];
@@ -127,7 +132,7 @@ int main(int argc, char** argv)
 
 #define scriptFlush          { fwrite(fBufst,fBufptr-fBufst,sizeof(char),fOutput); fBufst=fBufptr; }
 #define scriptFlushI(i)      { fwrite(fBufst,fBufptr-fBufst+i,sizeof(char),fOutput); fBufst=fBufptr; }
-#define scriptWrite(str,len) { fwrite((str),len,sizeof(char),fOutput); }
+#define scriptWrite(str,len) { fprint(fOutput,str,len); }
       
         for(a=0;a<fSize;(a++),(fBufptr++))
         {
@@ -152,25 +157,42 @@ int main(int argc, char** argv)
     		case '<':
         	    if (!fCode && *(fBufptr+1)=='$')
         	    {
-                	scriptFlush;
-                	scriptWrite("\\c\";\n",5);
-            		fBufst+=2;
-                	fBufptr++;
-                	a++;
-                	fCode=1;
-            	    }
+                    if (*(fBufptr+2)=='-')
+                    {
+                        scriptFlush;
+                        scriptWrite("<\\$",3);
+                        fBufst+=3;
+                        fBufptr++; a++;
+                    }
+                    else
+                    {
+                	    scriptFlush;
+                	    scriptWrite("\\c\";\n",5);
+            		    fBufst+=2;
+                	    fBufptr++; a++;
+                	    fCode=1;
+                    }
+            	}
         	    break;
+            case '-':
+                if (fCode && *(fBufptr+1)=='$' && *(fBufptr+2)=='>')
+                {
+                    scriptFlush;
+                    scriptWrite("$>",2);
+                    fBufst+=3;
+                    fBufptr++; a++;
+                }
+                break;
     		case '$':
         	    if (fCode)
         	    {
 			        if (*(fBufptr+1)=='>')
 			        {
-                	    scriptFlush;
-            		    scriptWrite("\necho -e \"",10);
-                	    fBufptr++;
-            		    fBufst+=2;
-                	    a++;
-                	    fCode=0;
+              	        scriptFlush;
+           		        scriptWrite("\necho -e \"",10);
+           		        fBufst+=2;
+               	        fBufptr++; a++;
+               	        fCode=0;
 			        }
             	}
         	    else 
@@ -189,5 +211,4 @@ int main(int argc, char** argv)
         free(fBuffer);
     }
 }
-
 
