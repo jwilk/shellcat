@@ -1,9 +1,13 @@
 VERSION   = $(shell cat VERSION)
 DISTFILES = Makefile COPYING README VERSION scat.c
 
-CC = gcc
-CFLAGS_opt = -Os -s
-CFLAGS_std = -std=gnu99 -pedantic -Wall
+ifndef TCC
+  CC = gcc
+  CFLAGS_opt = -Os -s
+  CFLAGS_std = -std=gnu99 -pedantic -Wall
+else
+  CC = tcc
+endif
 CFLAGS = $(CFLAGS_opt) $(CFLAGS_std) -DLARGEBUFFER -DVERSION=\"$(VERSION)\"
 
 all: scat
@@ -21,4 +25,4 @@ dist: distclean
 	fakeroot tar cf scat-$(VERSION).tar $(DISTFILES)
 	bzip2 -9 scat-$(VERSION).tar
 
-.PHONY: all scat clean distclean dist
+.PHONY: all clean distclean dist

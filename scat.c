@@ -1,6 +1,6 @@
-/* sc.c ::: main program   --*
- * -- version:  A0035      --*
- * -- modified: 10 Aug 2004 --*/
+/* scat.c ::: main program  --*
+ * -- version:  A0043       --*
+ * -- modified: 25 Aug 2004 --*/
 
 #include <stdio.h>
 #include <unistd.h>
@@ -127,12 +127,12 @@ int main(int argc, char** argv)
     if (fInput == NULL)
       xerror(fFilename);
     fseek(fInput, 0, SEEK_END);
-    fSize=ftell(fInput);
+    fSize = ftell(fInput);
     fseek(fInput, 0, SEEK_SET);
     fBuffer = (char*)calloc(fSize+1, sizeof(char));
     // The `+1' is enough. Indeed, we look at (i+1)-th char only if we're sure
     // that i-th char is not '\0'  
-    if (fBuffer==NULL)
+    if (fBuffer == NULL)
       xerror("allocating memory");
     fread(fBuffer, sizeof(char), fSize, fInput);
     fclose(fInput);
@@ -168,7 +168,7 @@ int main(int argc, char** argv)
       }
       scriptWrite("\" ", 2);
     }
-    scriptWrite("\nprintf -- \"", 12);
+    scriptWrite("\nprintf '%b' \'", 14);
     fBufptr = fBuffer;
     fCode = false;
 
@@ -183,10 +183,10 @@ int main(int argc, char** argv)
     fBufst = fBufptr;
     for(; a<fSize; a++, fBufptr++)
     {
-      if (!fCode && fBufptr[0]<' ')
+      if (!fCode && ((unsigned char)fBufptr[0]<' ' || fBufptr[0]=='\'' || fBufptr[0]=='\177'))
       {
-        char oct[5];
-        sprintf(oct, "\\%03o", fBufptr[0]);
+        char oct[6];
+        sprintf(oct, "\\%04o", (unsigned int)fBufptr[0]);
         if (!fCode) scriptFlushWrite(oct, 5, 1);
       }
       else
@@ -196,10 +196,6 @@ int main(int argc, char** argv)
           if (!fCode)
             scriptFlushWrite("\\\\", 2, 1);
           break;
-        case '"':
-          if (!fCode)
-            scriptFlushWrite("\\\"", 2, 1);
-          break;
         case '<':
           if (!fCode && fBufptr[1] == '$')
           {
@@ -207,7 +203,7 @@ int main(int argc, char** argv)
               scriptFlushWrite("<\\$", 3, 3);
             else
             {
-              scriptFlushWrite("\"\n", 2, 2);
+              scriptFlushWrite("\'\n", 2, 2);
               fCode = true;
             }
             fBufptr++; a++;
@@ -221,28 +217,18 @@ int main(int argc, char** argv)
           }
           break;
         case '$':
-          if (fCode)
+          if (fCode && fBufptr[1] == '>')
           {
-            if (fBufptr[1] == '>')
-            {
-              scriptFlushWrite("\nprintf -- \"", 12, 2);
-              fBufptr++; a++;
-              fCode=false;
-            }
+            scriptFlushWrite("\nprintf '%b' \'", 14, 2);
+            fBufptr++; a++;
+            fCode=false;
           }
-          else 
-            scriptFlushWrite("\\$", 2, 1);
-          break;
-        case '%':
-          if (!fCode)
-            scriptFlushWrite("%%", 2, 1);
           break;
       }
     }
-    if (fCode) 
-      scriptFlush;
-    else
-      scriptWrite("\"\n", 2);
+    scriptFlush;
+    if (!fCode) 
+      scriptWrite("\'\n", 2);
 #ifndef DEBUG
     fclose(fOutput);
 #endif
