@@ -1,6 +1,10 @@
 /* sc.c ::: main program    --*
- * -- version:  A0026       --*
- * -- modified: 25 Aug 2001 --*/
+ * -- version:  A0029       --*
+ * -- modified: 22 Jun 2003 --*/
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <stdio.h>
 #include <unistd.h>
@@ -9,13 +13,13 @@
 #include <errno.h>
 #include <string.h>
 
-#include "lang.inc.c"
+#include "lang.inc.h"
 
 #define cMINIBUFSIZE 1024
 #define fprint(f,s,l) fwrite(s,sizeof(char),l,f)
 #define xerror(s) { fprintf(stderr,"%s: %s: %s\n",argv[0],s,strerror(errno)); _exit(errno); }
 
-char* strVer = "0.02.00";
+char* strVer = "0.03.00";
 
 void showUsage(char* progname)
 {
@@ -30,7 +34,7 @@ void showUsage(char* progname)
 
 void showVersion(void)
 {
-  fprintf(stderr,"%s %s\n\n%s\n",lstrShellCat,strVer,lstrWarranty);
+    fprintf(stderr,"%s %s\n\n%s\n",lstrShellCat,strVer,lstrWarranty);
 }
 
 int main(int argc, char** argv)
@@ -38,6 +42,7 @@ int main(int argc, char** argv)
     static char fFShell[cMINIBUFSIZE] = "sh";
     static int fFVersion = 0;
     static int fFHelp    = 0;
+    int a;
   
     while(1)
     {      
@@ -51,11 +56,11 @@ int main(int argc, char** argv)
 
         int fOptIndex = 0;
         
-	    int c = getopt_long(argc,argv,"vhs:",fOptions,&fOptIndex);
+        int c = getopt_long(argc,argv,"vhs:",fOptions,&fOptIndex);
         if (c<0) break;
         if (c==0) c=fOptions[fOptIndex].val;
-	    switch(c)
-	    {
+        switch(c)
+        {
         case 'v': 
             fFVersion=1;
             break;
@@ -72,7 +77,7 @@ int main(int argc, char** argv)
                 *fFShell=0;
         default:
             break;
-	    }
+        }
     }
 
     if (fFVersion)
@@ -128,7 +133,6 @@ int main(int argc, char** argv)
         fBufptr = fBuffer;
         fBufst  = fBuffer;
         fCode = 0;
-        int a;
 
 #define scriptFlush          { fwrite(fBufst,fBufptr-fBufst,sizeof(char),fOutput); fBufst=fBufptr; }
 #define scriptFlushI(i)      { fwrite(fBufst,fBufptr-fBufst+i,sizeof(char),fOutput); fBufst=fBufptr; }
@@ -137,26 +141,26 @@ int main(int argc, char** argv)
         for(a=0;a<fSize;(a++),(fBufptr++))
         {
             switch(*fBufptr)
-    	    {
-    		case '\\':
-        	    if (!fCode)
-        	    {
-            		scriptFlush;
-            		scriptWrite("\\\\",2);
-            		fBufst++;
-        	    }
-        	    break;
-    		case '"':
-        	    if (!fCode)
-        	    {
-            		scriptFlush; 
-            		scriptWrite("\\\"",2);
-            		fBufst++;
-        	    }
-        	    break;
-    		case '<':
-        	    if (!fCode && *(fBufptr+1)=='$')
-        	    {
+            {
+            case '\\':
+                if (!fCode)
+                {
+                    scriptFlush;
+                    scriptWrite("\\\\",2);
+                    fBufst++;
+                }
+                break;
+            case '"':
+                if (!fCode)
+                {
+                    scriptFlush; 
+                    scriptWrite("\\\"",2);
+                    fBufst++;
+                }
+                break;
+            case '<':
+                if (!fCode && *(fBufptr+1)=='$')
+                {
                     if (*(fBufptr+2)=='-')
                     {
                         scriptFlush;
@@ -166,14 +170,14 @@ int main(int argc, char** argv)
                     }
                     else
                     {
-                	    scriptFlush;
-                	    scriptWrite("\\c\";\n",5);
-            		    fBufst+=2;
-                	    fBufptr++; a++;
-                	    fCode=1;
+                        scriptFlush;
+                        scriptWrite("\\c\";\n",5);
+                        fBufst+=2;
+                        fBufptr++; a++;
+                        fCode=1;
                     }
-            	}
-        	    break;
+                }
+                break;
             case '-':
                 if (fCode && *(fBufptr+1)=='$' && *(fBufptr+2)=='>')
                 {
@@ -183,26 +187,26 @@ int main(int argc, char** argv)
                     fBufptr++; a++;
                 }
                 break;
-    		case '$':
-        	    if (fCode)
-        	    {
-			        if (*(fBufptr+1)=='>')
-			        {
-              	        scriptFlush;
-           		        scriptWrite("\necho -e \"",10);
-           		        fBufst+=2;
-               	        fBufptr++; a++;
-               	        fCode=0;
-			        }
-            	}
-        	    else 
-        	    {
-            		scriptFlush;
-            		scriptWrite("\\$",2);
-            		fBufst++;
-        	    }
-        	    break;
-    	    }
+            case '$':
+                if (fCode)
+                {
+                    if (*(fBufptr+1)=='>')
+                    {
+                    	scriptFlush;
+                        scriptWrite("\necho -e \"",10);
+                        fBufst+=2;
+                        fBufptr++; a++;
+                        fCode=0;
+                    }
+                }
+                else 
+                {
+                scriptFlush;
+                    scriptWrite("\\$",2);
+                    fBufst++;
+                }
+                break;
+            }
         }
         scriptFlush;      
         if (!fCode) scriptWrite("\\c\"",3);
@@ -211,4 +215,3 @@ int main(int argc, char** argv)
         free(fBuffer);
     }
 }
-

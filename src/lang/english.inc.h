@@ -6,6 +6,6 @@ char* lstrUsageArguments = "arguments";
 char* lstrUsageFilename = "file";
 char* lstrUsageOptHelp = "display this help and exit";
 char* lstrUsageOptShell = "change the default shell to NEWSHELL";
-char* lstrUsageOptVersion = "display version information and exit";
+char* lstrUsageOptVersion = "output version information and exit";
 char* lstrUsageOptions = "OPTION(s)";
 char* lstrWarranty = "There is NO warranty.  You may redistribute this software\nunder the terms of the GNU General Public License.\nFor more information about these matters, see the files named COPYING.";
