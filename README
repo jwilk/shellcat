@@ -1,14 +1,14 @@
-shellcat, version 0.04
+shellcat, version 0.05
 ----------------------
 
 License:
-  GPL v. 2+
+  GPL v. 2+ (see: COPYING)
 
 ChangeLog:
 
 8 Aug 2001
   -- found the idea of ShellCAT
-  
+
 10 Aug 2001, version 0.00a
   -- started to write portions of code
 
@@ -51,12 +51,23 @@ ChangeLog:
   -- fixed minor bugs
 
 13 Dec 2002, version 0.03
-  -- now using automake & autoconf
+  -- now using automake and autoconf
 
 2 Jan 2004, version 0.04
-  -- removed automake & autoconf :=)
-  -- removed language version
+  -- removed automake and autoconf :=)
+  -- removed language versions
   -- code cleanup
-  -- addes some debug code
+  -- added some debug code
   -- fixed minor bugs
   -- written nice `Makefile'
+
+5 Aug 2004, version 0.05-pre
+  -- ignore #!... directive in the first line,
+     thanks to Simon Poole
+  -- C99 comformance
+
+10 Aug 2004, version 0.05
+  -- cosmetic changes
+  -- written some comments
+
+# vim:tw=76

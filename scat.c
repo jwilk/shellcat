@@ -1,6 +1,6 @@
 /* sc.c ::: main program   --*
- * -- version:  A0030      --*
- * -- modified: 2 Jan 2003 --*/
+ * -- version:  A0035      --*
+ * -- modified: 10 Aug 2004 --*/
 
 #include <stdio.h>
 #include <unistd.h>
@@ -25,17 +25,17 @@
 #define true 1
 #define false 0
 
-#define xerror(str) { realxerror(str,*argv); }
+#define xerror(str) { realxerror(str, *argv); }
 
 #ifdef DEBUG
-#  define debug(str) { fprintf(stderr,"/* %s */\n",str); } 
+#  define debug(str) { fprintf(stderr, "/* %s */\n", str); } 
 #else
 #  define debug(str) {}
 #endif
 
 inline void realxerror(char *str, char* pname)
 {
-  fprintf(stderr,"%s: %s: %s\n",pname,str,strerror(errno)); 
+  fprintf(stderr,"%s: %s: %s\n", pname, str, strerror(errno)); 
   exit(EXIT_FAILURE);
 }
 
@@ -46,7 +46,8 @@ inline void showUsage(char* progname)
     "Options:\n"
     "  -s, --shell=NEWSHELL   change the default shell to NEWSHELL\n"
     "  -h, --help             display this help and exit\n"
-    "  -v, --version          output version information and exit\n\n",progname);
+    "  -v, --version          output version information and exit\n\n",
+    progname);
 }
 
 inline void showVersion(void)
@@ -55,55 +56,57 @@ inline void showVersion(void)
      "ShellCAT " C_VERSION "\n\n"
      "There is NO warranty. You may redistribute this software\n"
      "under the terms of the GNU General Public License.\n"
-     "For more information about these matters, see the file named COPYING.\n\n",
-     C_VERSION);
+     "For more information about these matters, see the file named COPYING.\n\n");
 }
 
 inline size_t fprint(FILE* stream, char* str, int len)
 {
-  return fwrite(str,sizeof(char),len,stream);
+  return fwrite(str, sizeof(char), len, stream);
 }
 
 int main(int argc, char** argv)
 {
-  static char fFShell[C_MINBUFSIZE] = "sh";
-  static int fFVersion = 0;
-  static int fFHelp    = 0;
   int a;
+  char fFShell[C_MINBUFSIZE];
+  bool fFVersion = false;
+  bool fFHelp = false;
+
+  strncpy(fFShell, "/bin/sh", C_MINBUFSIZE-1);
+  fFShell[C_MINBUFSIZE-1] = 0;
   
   while(true)
   {      
-    static struct option fOptions[]=
+    static struct option fOptions[] =
     {
-      {"shell",1,0,'s'},
-      {"version",0,0,'v'},
-      {"help",0,0,'h'},
-      {0,0,0,0}
+      {"shell",   1, 0, 's'},
+      {"version", 0, 0, 'v'},
+      {"help",    0, 0, 'h'},
+      {0, 0, 0, 0}
     };
 
     int fOptIndex = 0;
         
-    int c = getopt_long(argc,argv,"vhs:",fOptions,&fOptIndex);
-    if (c<0) break;
-    if (c==0) c=fOptions[fOptIndex].val;
+    int c = getopt_long(argc, argv, "vhs:", fOptions, &fOptIndex);
+    if (c < 0) break;
+    if (c == 0) c=fOptions[fOptIndex].val;
     switch(c)
     {
       case 'v': 
-        fFVersion=1;
+        fFVersion = true;
         break;
       case 'h':
-        fFHelp=1;
+        fFHelp = true;
         break;
       case 's':
         if (optarg)
         {
-          strncpy(fFShell,optarg,sizeof fFShell - 1);
-          fFShell[sizeof fFShell]=0;
+          strncpy(fFShell, optarg, C_MINBUFSIZE-1);
+          fFShell[C_MINBUFSIZE-1] = 0;
         }
         else
-            *fFShell=0;
+          *fFShell=0;
       default:
-          break;
+        break;
     }
   }
 
@@ -115,117 +118,135 @@ int main(int argc, char** argv)
   {
     bool fCode;
     int fSize;
-    int i;
-    char* fFilename;
-    char* fBuffer;
-    char* fBufptr;
-    char* fBufst;
-    FILE* fInput;
-    FILE* fOutput;
+    char *fFilename;
+    char *fBuffer, *fBufptr, *fBufst;
+    FILE *fInput, *fOutput;
 
-    fFilename=argv[optind++];
-    fInput = fopen(fFilename,"r");
+    fFilename = argv[optind++];
+    fInput = fopen(fFilename, "r");
     if (fInput == NULL)
       xerror(fFilename);
-    fseek(fInput,0,SEEK_END);
+    fseek(fInput, 0, SEEK_END);
     fSize=ftell(fInput);
-    fseek(fInput,0,SEEK_SET);
-    fBuffer=(char*)calloc(fSize+2,sizeof(char));
+    fseek(fInput, 0, SEEK_SET);
+    fBuffer = (char*)calloc(fSize+1, sizeof(char));
+    // The `+1' is enough. Indeed, we look at (i+1)-th char only if we're sure
+    // that i-th char is not '\0'  
     if (fBuffer==NULL)
       xerror("allocating memory");
-    memset(fBuffer,0,fSize+2);
-    fread(fBuffer,sizeof(char),fSize,fInput);
+    fread(fBuffer, sizeof(char), fSize, fInput);
     fclose(fInput);
                 
 #ifndef DEBUG
-    fOutput = popen(fFShell,"w");
+    fOutput = popen(fFShell, "w");
     if (fOutput == NULL)
       xerror(fFShell);
 #else
-    fOutput=stdout;
+    fOutput = stdout;
 #endif
 
-#define scriptFlush          { fwrite(fBufst,fBufptr-fBufst,sizeof(char),fOutput); fBufst=fBufptr; }
-#define scriptFlushI(i)      { fwrite(fBufst,fBufptr-fBufst+i,sizeof(char),fOutput); fBufst=fBufptr; }
-#define scriptWrite(str,len) { fprint(fOutput,str,len); }
-#define scriptFlushWrite(str,len,add) \
-                             { scriptFlush; scriptWrite(str,len); fBufst+=add; }
+#define scriptFlush \
+  do { fprint(fOutput, fBufst, fBufptr-fBufst); fBufst=fBufptr; } while (false)
+#define scriptFlushI(i) \
+  do { fprint(fOutput, fBufst, fBufptr-fBufst+i); fBufst=fBufptr; } while (false)
+#define scriptWrite(str, len) \
+  do { fprint(fOutput, str, len); } while(false)
+#define scriptFlushWrite(str, len, add) \
+  do { scriptFlush; scriptWrite(str, len); fBufst+=add; } while (false)
         
-    scriptWrite("set - ",6);
-    while(optind<argc)
+    scriptWrite("set - ", 6);
+    while (optind < argc) // forward parameters to the script
     {
       char* x=argv[optind++];
-      scriptWrite("\"",1);
+      scriptWrite("\"", 1);
       while(*x)
       {
-        if(*x=='"' || *x=='\\')
-          scriptWrite("\\",1);
-        scriptWrite(x,1);
+        if (*x=='"' || *x=='\\')
+          scriptWrite("\\", 1);
+        scriptWrite(x, 1);
         x++;
       }
-      scriptWrite("\" ",2);
+      scriptWrite("\" ", 2);
     }
-    scriptWrite("\necho -e \"",10);
+    scriptWrite("\nprintf -- \"", 12);
     fBufptr = fBuffer;
-    fBufst  = fBuffer;
     fCode = false;
-      
-    for(a=0;a<fSize;(a++),(fBufptr++))
+
+    a = 0;
+    if (fBufptr[0]=='#' && fBufptr[1]=='!') // ignore the #!... directive
+      for (; a<fSize; a++, fBufptr++)
+        if (*fBufptr=='\n')
+        {
+          fBufptr++; a++;
+          break;
+        }
+    fBufst = fBufptr;
+    for(; a<fSize; a++, fBufptr++)
     {
+      if (!fCode && fBufptr[0]<' ')
+      {
+        char oct[5];
+        sprintf(oct, "\\%03o", fBufptr[0]);
+        if (!fCode) scriptFlushWrite(oct, 5, 1);
+      }
+      else
       switch(fBufptr[0])
       {
         case '\\':
           if (!fCode)
-            scriptFlushWrite("\\\\",2,1);
+            scriptFlushWrite("\\\\", 2, 1);
           break;
         case '"':
           if (!fCode)
-            scriptFlushWrite("\\\"",2,1);
+            scriptFlushWrite("\\\"", 2, 1);
           break;
         case '<':
-          if ((!fCode) && fBufptr[1]=='$')
+          if (!fCode && fBufptr[1] == '$')
           {
-            if (fBufptr[2]=='-')
-            {
-              scriptFlushWrite("<\\$",3,3);
-              fBufptr++; a++;
-            }
+            if (fBufptr[2] == '-')
+              scriptFlushWrite("<\\$", 3, 3);
             else
             {
-              scriptFlushWrite("\\c\";\n",5,2);
-              fBufptr++; a++;
-              fCode=true;
+              scriptFlushWrite("\"\n", 2, 2);
+              fCode = true;
             }
+            fBufptr++; a++;
           }
           break;
         case '-':
           if (fCode && fBufptr[1]=='$' && fBufptr[2]=='>')
           {
-            scriptFlushWrite("$>",2,3);
+            scriptFlushWrite("$>", 2, 3);
             fBufptr++; a++;
           }
           break;
         case '$':
           if (fCode)
           {
-            if (fBufptr[1]=='>')
+            if (fBufptr[1] == '>')
             {
-              scriptFlushWrite("\necho -e \"",10,2);
+              scriptFlushWrite("\nprintf -- \"", 12, 2);
               fBufptr++; a++;
               fCode=false;
             }
           }
           else 
-            scriptFlushWrite("\\$",2,1);
+            scriptFlushWrite("\\$", 2, 1);
+          break;
+        case '%':
+          if (!fCode)
+            scriptFlushWrite("%%", 2, 1);
           break;
       }
     }
-    scriptFlush;      
-    if (!fCode) 
-      scriptWrite("\\c\"",3);
+    if (fCode) 
+      scriptFlush;
+    else
+      scriptWrite("\"\n", 2);
 #ifndef DEBUG
     fclose(fOutput);
 #endif
     free(fBuffer);
   }
+  return EXIT_SUCCESS;
 }

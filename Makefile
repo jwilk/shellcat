@@ -1,8 +1,10 @@
 VERSION   = $(shell cat VERSION)
-DISTFILES = Makefile README VERSION scat.c
+DISTFILES = Makefile COPYING README VERSION scat.c
 
-CC     = gcc
-CFLAGS = -s -Os -DVERSION=\"$(VERSION)\"
+CC = gcc
+CFLAGS_opt = -Os -s
+CFLAGS_std = -std=gnu99 -pedantic -Wall
+CFLAGS = $(CFLAGS_opt) $(CFLAGS_std) -DLARGEBUFFER -DVERSION=\"$(VERSION)\"
 
 all: scat
 
