@@ -1,0 +1,10 @@
+char* lstrOptions = "Opcje";
+char* lstrShellCat = "ShellCAT";
+char* lstrUsage = "U¿ycie";
+char* lstrUsageArguments = "argumenty";
+char* lstrUsageFilename = "plik";
+char* lstrUsageOptHelp = "pokazuje tê pomoc i koñczy dzia³anie";
+char* lstrUsageOptShell = "zmienia domy¶lny shell na NEWSHELL";
+char* lstrUsageOptVersion = "pokazuje informacje o wersji i koñczy dzia³anie";
+char* lstrUsageOptions = "OPCJA(e)";
+char* lstrWarranty = "Nie ma ¯ADNEJ gwarancji. Mo¿esz redestrybuowaæ to oprogramowanie\nna warunkach licencji GNU General Public License.\nWiêcej informacji mo¿na znale¼æ w pliku COPYING (po angielsku).";
