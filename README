@@ -1,0 +1,62 @@
+shellcat, version 0.04
+----------------------
+
+License:
+  GPL v. 2+
+
+ChangeLog:
+
+8 Aug 2001
+  -- found the idea of ShellCAT
+  
+10 Aug 2001, version 0.00a
+  -- started to write portions of code
+
+15 Aug 2001, version 0.00b
+  -- first running version
+
+16 Aug 2001, version 0.00c
+  -- now arguments are passed into the ShellCAT script
+
+17 Aug 2001, version 0.00d
+  -- fixed a bug with escaping
+  -- first version without really serious bugs
+
+18 Aug 2001, version 0.00e
+  -- made some speed improvement
+
+19 Aug 2001, version 0.00f
+  -- fixed minor bugs
+
+21 Aug 2001, version 0.00g
+  -- fixed minor bugs
+
+22 Aug 2001, version 0.00h
+  -- now ShellCAT does not create any files while executing script
+
+23 Aug 2001, version 0.01
+  -- corrected `lang.inc.c'
+  -- added some error handling
+  -- now you can specify shell different than default
+  -- fixed some minor bugs
+
+25 Aug 2001, version 0.01a
+  -- now sequences `<$-' and `-$>' have special meanings
+  -- added some error handling
+
+29 Aug 2001, version 0.01b
+  -- added some error handling
+
+30 Aug 2001, version 0.02
+  -- fixed minor bugs
+
+13 Dec 2002, version 0.03
+  -- now using automake & autoconf
+
+2 Jan 2004, version 0.04
+  -- removed automake & autoconf :=)
+  -- removed language version
+  -- code cleanup
+  -- addes some debug code
+  -- fixed minor bugs
+  -- written nice `Makefile'
