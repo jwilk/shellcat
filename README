@@ -1,86 +1,117 @@
 shellcat, version 0.07
-----------------------
+======================
 
-License:
-  GPL v. 2+ (see: COPYING)
+License
+-------
+Copyright © 2001, 2002, 2004, 2005, 2008
+`Jakub Wilk <ubanus@users.sf.net>`_.
 
-ChangeLog:
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful, but *without
+any warranty*; without even the implied warranty of *merchantability* or
+*fitness for a particular purpose*.  See the GNU General Public License for
+more details.
+
+ChangeLog
+---------
 
 3 Apr 2005, version 0.07
-  -- standard input is not blocked any more   
+^^^^^^^^^^^^^^^^^^^^^^^^
+* Standard input is not blocked any more.
+* Major code cleanup.
 
 24 Aug 2004, version 0.06
-  -- fixed buggy behaviour with files not ending with '\n'
-     or some other special character
-  -- support for busybox shell, thanks to Simon Poole
-  -- solved problems with backslashes, backticks and 
-     chars '\000'...'\037', '\177'...'\377'
-  -- works with busybox ash, dash, bash, ksh, zsh :=)
-  -- support for TinyCC: just do `make TCC=1'
+^^^^^^^^^^^^^^^^^^^^^^^^^   
+* Fixed buggy behaviour with files not ending with ``\n`` or some other
+  special character.
+* Support for busybox shell; thanks to Simon Poole.
+* Solved problems with backslashes, backticks and chars ``\000`` … ``\037``,
+  ``\177`` … ``\377``.
+* Works with busybox ash, dash, bash, ksh, zsh.
+* Support for TinyCC: just do ``make TCC=1``.
 
 5 Aug 2004, version 0.05-pre
-  -- ignore #!... directive in the first line, 
-     thanks to Simon Poole
-  -- C99 conformance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Ignore shebang in the first line; thanks to Simon Poole.
+* C99 conformance.
 
 10 Aug 2004, version 0.05
-  -- cosmetic changes
-  -- written some comments
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* Cosmetic changes.
+* Written some comments.
 
 2 Jan 2004, version 0.04
-  -- removed automake and autoconf :=)
-  -- removed language versions
-  -- code cleanup
-  -- added some debug code
-  -- fixed minor bugs
-  -- written nice `Makefile'
+^^^^^^^^^^^^^^^^^^^^^^^^
+* Removed automake and autoconf junk.
+* Removed language versions.
+* Code cleanup.
+* Added some debug code.
+* Fixed minor bugs.
+* Written nice ``Makefile``.
 
 13 Dec 2002, version 0.03
-  -- use automake and autoconf
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* Use automake and autoconf.
 
 30 Aug 2001, version 0.02
-  -- fixed minor bugs
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* Fixed minor bugs.
 
 29 Aug 2001, version 0.01b
-  -- added some error handling
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Added some error handling.
 
 25 Aug 2001, version 0.01a
-  -- sequences `<$-' and `-$>' have special meanings
-  -- added some error handling
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Sequences ``<$-`` and ``-$>`` have special meanings.
+* Added some error handling.
 
 23 Aug 2001, version 0.01
-  -- corrected the language file
-  -- added some error handling
-  -- now you can specify shell different than default
-  -- fixed some minor bugs
+^^^^^^^^^^^^^^^^^^^^^^^^^
+* Corrected the language file.
+* Added some error handling.
+* Now you can specify shell different than default.
+* Fixed some minor bugs.
 
 22 Aug 2001, version 0.00h
-  -- don't create any files while executing script
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Don't create any files while executing script.
 
 21 Aug 2001, version 0.00g
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Fixed minor bugs.
+
 19 Aug 2001, version 0.00f
-  -- fixed minor bugs
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Fixed minor bugs.
 
 18 Aug 2001, version 0.00e
-  -- made some speed improvement
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Made some speed improvement.
 
 17 Aug 2001, version 0.00d
-  -- fixed a bug with escaping
-  -- first version without really serious bugs
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Fixed a bug with escaping.
+* First version without really serious bugs.
 
 16 Aug 2001, version 0.00c
-  -- arguments are passed into the ShellCAT script
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Arguments are passed into the ShellCAT script.
 
 15 Aug 2001, version 0.00b
-  -- first running version
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* First running version.
 
 10 Aug 2001, version 0.00a
-  -- started to write portions of code
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Started to write portions of code.
 
 8 Aug 2001
-  -- found the idea of ShellCAT
+^^^^^^^^^^
+* Found the idea of ShellCAT.
 
-
-3 Apr 2004, version 0.07
-
-# vim:tw=76
+.. vim:tw=76 et ft=rst
