@@ -1,5 +1,5 @@
 /* Copyright © 2001, 2002, 2004, 2005, 2008
- * Jakub Wilk <ubanus@users.sf.net>.
+ * Jakub Wilk <jwilk@jwilk.net>.
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
