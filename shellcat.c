@@ -22,18 +22,21 @@
 
 #include <errno.h>
 #include <getopt.h>
+#include <libgen.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #ifndef VERSION
 #   define VERSION "(devel)"
 #endif
-
-#define STDIN_FILENO_DUP 3
 
 static const char *progname = "shellcat";
 
@@ -65,6 +68,54 @@ static void fprint(FILE *stream, const char *str, int len)
     if (fwrite(str, len, 1, stream) != 1) {
         fail("fwrite");
     }
+}
+
+char * create_pipe()
+{
+    int rc;
+    char *path;
+    const char *tmpdir = getenv("TMPDIR");
+    if (tmpdir == NULL)
+        tmpdir = "/tmp";
+    path = malloc(strlen(tmpdir) + 32);
+    if (path == NULL) {
+        fail("malloc");
+    }
+    sprintf(path, "%s/shellcat.XXXXXX", tmpdir);
+    if (mkdtemp(path) == NULL)
+        fail("mkdtemp");
+    strcat(path, "/pipe");
+    rc = mkfifo(path, 0600);
+    if (rc != 0)
+        fail("mkfifo");
+    return path;
+}
+
+void free_pipe(char *path)
+{
+    int rc;
+    rc = unlink(path);
+    if (rc != 0)
+        fail("unlink");
+    char * dirpath = dirname(path);
+    rc = rmdir(dirpath);
+    if (rc != 0)
+        fail("rmdir");
+    free(path);
+}
+
+void sigchld_handler(int signal)
+{
+    _exit(EXIT_FAILURE);
+}
+
+int reap_child()
+{
+    int rc;
+    if (wait(&rc) == -1) {
+        fail("wait");
+    }
+    return rc;
 }
 
 int main(int argc, char **argv)
@@ -116,7 +167,7 @@ int main(int argc, char **argv)
         long filesize;
         char *filename;
         char *buffer, *buftail, *bufhead;
-        FILE *instream, *outstream;
+        FILE *instream;
 
         filename = argv[optind++];
         instream = fopen(filename, "r");
@@ -149,16 +200,24 @@ int main(int argc, char **argv)
         if (fclose(instream) == EOF)
             fail(filename);
 
-        if (dup2(STDIN_FILENO, STDIN_FILENO_DUP) == -1)
-            fail("dup2");
-        outstream = popen(shell, "w");
-        if (outstream == NULL)
-            fail(shell);
+        char * pipepath = create_pipe();
+        signal(SIGCHLD, sigchld_handler);
+        switch (fork()) {
+            case -1:
+                fail("fork");
+            case 0:
+                execlp(shell, shell, pipepath, NULL);
+                fail(shell);
+        }
+        FILE * pipe = fopen(pipepath, "w");
+        if (pipe == NULL)
+            fail(pipepath);
+        signal(SIGCHLD, SIG_DFL);
 
 #define script_flush \
-    do { fprint(outstream, bufhead, buftail-bufhead); bufhead = buftail; } while (false)
+    do { fprint(pipe, bufhead, buftail-bufhead); bufhead = buftail; } while (false)
 #define script_write(str, len) \
-    do { fprint(outstream, str, len); } while(false)
+    do { fprint(pipe, str, len); } while(false)
 #define script_flush_write(str, len, add) \
     do { script_flush; script_write(str, len); bufhead += add; } while (false)
 
@@ -176,10 +235,7 @@ int main(int argc, char **argv)
             }
             script_write("\' ", 2);
         }
-        script_write(
-            "\nexec <&3 3<&-"
-            "\nprintf '%s' \'", 28
-        );
+        script_write("\nprintf '%s' \'", 14);
         buftail = buffer;
         have_code = false;
 
@@ -234,16 +290,13 @@ int main(int argc, char **argv)
         if (!have_code)
             script_write("\'\n", 2);
         script_write("exec <&-\n", 9);
-        switch (pclose(outstream)) {
-            case -1:
-                fail("pclose");
-            case 0:
-                break;
-            default:
-                rc = EXIT_FAILURE;
-        }
-        close(STDIN_FILENO_DUP);
         free(buffer);
+        if (fclose(pipe) == EOF) {
+            fail(pipepath);
+        }
+        free_pipe(pipepath);
+        if (reap_child() != 0)
+            rc = EXIT_FAILURE;
     }
     return rc;
 }
