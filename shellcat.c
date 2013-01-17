@@ -40,7 +40,7 @@
 
 inline void realxerror(char *str, char* pname)
 {
-  fprintf(stderr,"%s: %s: %s\n", pname, str, strerror(errno)); 
+  fprintf(stderr,"%s: %s: %s\n", pname, str, strerror(errno));
   exit(EXIT_FAILURE);
 }
 
@@ -77,9 +77,9 @@ int main(int argc, char **argv)
   bool opt_help = false;
 
   strcpy(shell, "/bin/sh");
-  
+
   while (true)
-  {      
+  {
     static struct option options[] =
     {
       { "shell",   1, 0, 's' },
@@ -89,13 +89,13 @@ int main(int argc, char **argv)
     };
 
     int optindex = 0;
-        
+
     int c = getopt_long(argc, argv, "vhs:", options, &optindex);
     if (c < 0) break;
     if (c == 0) c = options[optindex].val;
     switch(c)
     {
-      case 'v': 
+      case 'v':
         opt_version = true;
         break;
       case 'h':
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
       xerror(filename);
     buffer = (char*)calloc(filesize+1, sizeof(char));
     // The `+1' is enough. Indeed, we look at (i+1)-th char only if we're sure
-    // that i-th char is not '\0'  
+    // that i-th char is not '\0'
     if (buffer == NULL)
       xerror("memory allocation");
     fread(buffer, sizeof(char), filesize, instream);
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
       xerror(filename);
     if (fclose(instream) == EOF)
       xerror(filename);
-                
+
     if (dup2(STDIN_FILENO, STDIN_FILENO_DUP) == -1)
       xerror("dup2");
     outstream = popen(shell, "w");
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
   do { fprint(outstream, str, len); } while(false)
 #define script_flush_write(str, len, add) \
   do { script_flush; script_write(str, len); bufhead += add; } while (false)
-        
+
     script_write("set - ", 6);
     while (optind < argc) // forward parameters to the script
     {
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
       }
     }
     script_flush;
-    if (!have_code) 
+    if (!have_code)
       script_write("\'\n", 2);
     script_write("exec <&-\n", 10);
     if (fclose(outstream) == EOF)
