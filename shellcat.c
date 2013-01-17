@@ -36,13 +36,13 @@
 
 #define STDIN_FILENO_DUP 3
 
-static void realxerror(char *str, char* pname)
+static void realxerror(const char *str, const char* pname)
 {
   fprintf(stderr,"%s: %s: %s\n", pname, str, strerror(errno));
   exit(EXIT_FAILURE);
 }
 
-static void show_usage(char* progname)
+static void show_usage(const char* progname)
 {
   fprintf(stderr,
     "Usage: %s [options] [file [arguments]]\n\n"
@@ -58,7 +58,7 @@ static void show_version(void)
   fprintf(stderr, "shellcat " VERSION "\n");
 }
 
-static size_t fprint(FILE *stream, char *str, int len)
+static size_t fprint(FILE *stream, const char *str, int len)
 {
   return fwrite(str, sizeof(char), len, stream);
 }
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
     script_write("set - ", 6);
     while (optind < argc) // forward parameters to the script
     {
-      char* arg = argv[optind++];
+      const char* arg = argv[optind++];
       script_write("\'", 1);
       while (*arg)
       {
