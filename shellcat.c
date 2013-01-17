@@ -1,4 +1,4 @@
-/* Copyright © 2001, 2002, 2004, 2005, 2008
+/* Copyright © 2001, 2002, 2004, 2005, 2008, 2013
  * Jakub Wilk <jwilk@jwilk.net>.
  *
  * This program is free software; you can redistribute it and/or modify it
