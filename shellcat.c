@@ -69,6 +69,7 @@ static void fprint(FILE *stream, const char *str, int len)
 
 int main(int argc, char **argv)
 {
+    int rc = EXIT_SUCCESS;
     const char *shell = "/bin/sh";
     bool opt_version = false;
     bool opt_help = false;
@@ -233,12 +234,18 @@ int main(int argc, char **argv)
         if (!have_code)
             script_write("\'\n", 2);
         script_write("exec <&-\n", 9);
-        if (pclose(outstream) == -1)
-            fail(shell);
+        switch (pclose(outstream)) {
+            case -1:
+                fail("pclose");
+            case 0:
+                break;
+            default:
+                rc = EXIT_FAILURE;
+        }
         close(STDIN_FILENO_DUP);
         free(buffer);
     }
-    return EXIT_SUCCESS;
+    return rc;
 }
 
 // vim:ts=4 sw=4 et
