@@ -1,5 +1,5 @@
-shellcat 0.0.7 (release on 2005-04-03)
---------------------------------------
+shellcat 1.0 (not released yet)
+-------------------------------
 * Standard input is not blocked any more.
 * Major code cleanup.
 
