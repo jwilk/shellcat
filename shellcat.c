@@ -66,11 +66,10 @@ static size_t fprint(FILE *stream, const char *str, int len)
 int main(int argc, char **argv)
 {
   int a;
-  char shell[BUFSIZ];
+  const char *shell = "/bin/sh";
   bool opt_version = false;
   bool opt_help = false;
 
-  strcpy(shell, "/bin/sh");
 
   while (true)
   {
@@ -97,12 +96,8 @@ int main(int argc, char **argv)
         break;
       case 's':
         if (optarg)
-        {
-          strncpy(shell, optarg, BUFSIZ-1);
-          shell[BUFSIZ-1] = 0;
-        }
-        else
-          *shell = '\0';
+          shell = optarg;
+        break;
       default:
         break;
     }
