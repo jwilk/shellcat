@@ -175,19 +175,19 @@ int main(int argc, char **argv)
     while (optind < argc) // forward parameters to the script
     {
       char* arg = argv[optind++];
-      script_write("\"", 1);
+      script_write("\'", 1);
       while (*arg)
       {
-        if (*arg == '$' || *arg == '`' || *arg=='"' || *arg=='\\')
-          script_write("\\", 1);
+        if (*arg == '\'')
+          script_write("'\\'", 3);
         script_write(arg, 1);
         arg++;
       }
-      script_write("\" ", 2);
+      script_write("\' ", 2);
     }
     script_write(
       "\nexec <&3 3<&-"
-      "\nprintf '%b' \'", 28);
+      "\nprintf '%s' \'", 28);
     buftail = buffer;
     have_code = false;
 
@@ -202,18 +202,11 @@ int main(int argc, char **argv)
     bufhead = buftail;
     for ( ; a<filesize; a++, buftail++)
     {
-      if (!have_code && ((unsigned char)buftail[0]<' ' || buftail[0]=='\'' || buftail[0]=='\177'))
-      {
-        char oct[6];
-        sprintf(oct, "\\%04o", (unsigned int)buftail[0]);
-        if (!have_code) script_flush_write(oct, 5, 1);
-      }
-      else
       switch (buftail[0])
       {
-        case '\\':
+        case '\'':
           if (!have_code)
-            script_flush_write("\\\\", 2, 1);
+            script_flush_write("'\\''", 4, 1);
           break;
         case '<':
           if (!have_code && buftail[1] == '$')
@@ -238,7 +231,7 @@ int main(int argc, char **argv)
         case '$':
           if (have_code && buftail[1] == '>')
           {
-            script_flush_write("\nprintf '%b' \'", 14, 2);
+            script_flush_write("\nprintf '%s' \'", 14, 2);
             buftail++; a++;
             have_code=false;
           }
