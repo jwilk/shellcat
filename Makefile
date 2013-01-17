@@ -1,6 +1,6 @@
 VERSION = $(shell sed -ne "1 s/^.* \([0-9.]\+\)$$/\\1/gp" < README)
 FAKEROOT = $(shell command -v fakeroot 2>/dev/null)
-DISTFILES = Makefile COPYING README scat.c
+DISTFILES = Makefile COPYING README shellcat.c
 
 CFLAGS_def := -DLARGEBUFFER
 CFLAGS_def += -DVERSION='"$(VERSION)"'
@@ -13,16 +13,16 @@ else
 endif
 CFLAGS = $(CFLAGS_opt) $(CFLAGS_std) $(CFLAGS_def)
 
-all: scat
+all: shellcat
 
-scat: scat.c
-	$(CC) $(CFLAGS) scat.c -o scat
+shellcat: shellcat.c
+	$(CC) $(CFLAGS) shellcat.c -o shellcat
             
 clean:
-	rm -f scat scat-*.tar.*
+	rm -f shellcat shellcat-*.tar.*
 
 dist:
-	$(FAKEROOT) tar -cjf scat-$(VERSION).tar.bz2 $(DISTFILES)
+	$(FAKEROOT) tar -cjf shellcat-$(VERSION).tar.bz2 $(DISTFILES)
 
 .PHONY: all clean dist
 
