@@ -1,6 +1,4 @@
 VERSION = $(shell sed -ne "1 s/^.* \([0-9.]\+\)$$/\\1/gp" < README)
-FAKEROOT = $(shell command -v fakeroot 2>/dev/null)
-DISTFILES = Makefile COPYING README shellcat.c
 
 CFLAGS_def := -DLARGEBUFFER
 CFLAGS_def += -DVERSION='"$(VERSION)"'
@@ -21,9 +19,6 @@ shellcat: shellcat.c
 clean:
 	rm -f shellcat shellcat-*.tar.*
 
-dist:
-	$(FAKEROOT) tar -cjf shellcat-$(VERSION).tar.bz2 $(DISTFILES)
-
-.PHONY: all clean dist
+.PHONY: all clean
 
 # vim:ts=4
