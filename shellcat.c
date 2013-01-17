@@ -23,6 +23,7 @@
 #include <errno.h>
 #include <getopt.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -110,7 +111,7 @@ int main(int argc, char **argv)
   else
   {
     bool have_code;
-    int filesize;
+    long filesize;
     char *filename;
     char *buffer, *buftail, *bufhead;
     FILE *instream, *outstream;
@@ -124,6 +125,10 @@ int main(int argc, char **argv)
     filesize = ftell(instream);
     if (filesize == -1)
       fail(filename);
+    if (filesize >= SIZE_MAX) {
+      errno = EOVERFLOW;
+      fail(filename);
+    }
     if (fseek(instream, 0, SEEK_SET) == -1)
       fail(filename);
     buffer = (char*)malloc(filesize + 1);
