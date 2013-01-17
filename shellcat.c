@@ -107,7 +107,7 @@ char * create_pipe()
     const char *tmpdir = getenv("TMPDIR");
     if (tmpdir == NULL)
         tmpdir = "/tmp";
-    path = malloc(strlen(tmpdir) + 32);
+    path = malloc(strlen(tmpdir) + 22);
     if (path == NULL) {
         fail("malloc");
     }
