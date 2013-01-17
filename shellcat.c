@@ -47,9 +47,9 @@ static void show_usage(const char* progname)
   fprintf(stderr,
     "Usage: %s [options] [file [arguments]]\n\n"
     "Options:\n"
-    "  -s, --shell=NEWSHELL   change the default shell to NEWSHELL\n"
-    "  -h, --help             display this help and exit\n"
-    "  -v, --version          output version information and exit\n\n",
+    "  -s, --shell=SHELL   change the default shell to SHELL\n"
+    "  -h, --help          display this help and exit\n"
+    "  -v, --version       output version information and exit\n\n",
     progname);
 }
 
