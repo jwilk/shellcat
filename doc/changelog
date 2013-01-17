@@ -5,32 +5,27 @@ shellcat 1.0 (not released yet)
 
 shellcat 0.0.6 (released on 2004-08-24)
 ---------------------------------------
-* Fixed buggy behaviour with files not ending with ``\n`` or some other
-  special character.
-* Support for busybox shell; thanks to Simon Poole.
-* Solved problems with backslashes, backticks and chars ``\000`` … ``\037``,
+* Fix incorrect handling of files that don't end with ``\n`` or another special
+  character.
+* Fix issues with backslashes, backticks and chars ``\000`` … ``\037``,
   ``\177`` … ``\377``.
-* Works with busybox ash, dash, bash, ksh, zsh.
-* Support for TinyCC: just do ``make TCC=1``.
+* Add support for busybox shell. Thanks to Simon Poole.
+* The program now with busybox, ash, dash, bash, ksh, zsh.
+* Add support for TinyCC (try ``make TCC=1``).
 
 shellcat 0.05 (release on 2004-08-10)
 -------------------------------------
-* Cosmetic changes.
-* Written some comments.
-
-shellcat 0.05~pre (relesed on 2004-08-05)
------------------------------------------
-* Ignore shebang in the first line; thanks to Simon Poole.
-* C99 conformance.
+* Ignore shebang in the first line.
+  Thanks to Simon Poole.
+* The code is now conforming to C99.
 
 shellcat 0.04 (released on 2004-01-02)
 --------------------------------------
-* Removed automake and autoconf junk.
-* Removed language versions.
 * Code cleanup.
-* Added some debug code.
-* Fixed minor bugs.
-* Written nice ``Makefile``.
+* Remove automake and autoconf junk.
+* Remove national language support.
+* Fix minor bugs.
+* Add the ``Makefile``.
 
 shellcat 0.03 (released on 2002-12-13)
 --------------------------------------
@@ -38,59 +33,12 @@ shellcat 0.03 (released on 2002-12-13)
 
 shellcat 0.02 (released on 2001-08-30)
 --------------------------------------
-* Fixed minor bugs.
-
-shellcat 0.01b (released on 2001-08-29)
-----------------------------------------
-* Added some error handling.
-
-shellcat 0.01a (released on 2001-08-25)
----------------------------------------
-* Sequences ``<$-`` and ``-$>`` have special meanings.
-* Added some error handling.
+* Improve error handling.
+* Fix minor bugs.
+* The ``<$-`` and ``-$>`` sequences are now reserved.
 
 shellcat 0.01 (released on 2001-08-23)
 --------------------------------------
-* Corrected the language file.
-* Added some error handling.
-* Now you can specify shell different than default.
-* Fixed some minor bugs.
-
-shellcat 0.00h (released on 2001-08-22)
----------------------------------------
-* Don't create any files while executing script.
-
-shellcat 0.00g (released on 2001-08-21)
----------------------------------------
-* Fixed minor bugs.
-
-shellcat 0.00f (released on 2001-08-19)
----------------------------------------
-* Fixed minor bugs.
-
-shellcat 0.00e (released on 2001-08-18)
----------------------------------------
-* Made some speed improvement.
-
-shellcat 0.00d (released on 2001-08-17)
----------------------------------------
-* Fixed a bug with escaping.
-* First version without really serious bugs.
-
-shellcat 0.00c (released on 2001-08-16)
----------------------------------------
-* Arguments are passed into the ShellCAT script.
-
-shellcat 0.00b (released on 2001-08-15)
----------------------------------------
-* First running version.
-
-shellcat 0.00a (released on 2001-08-15)
----------------------------------------
-* Started to write portions of code.
-
-(2001-08-08)
-------------
-* Found the idea of ShellCAT.
+* Initial release.
 
 .. vim:tw=76 et ft=rst
