@@ -55,11 +55,7 @@ inline void show_usage(char* progname)
 
 inline void show_version(void)
 {
-  fprintf(stderr,
-    "shellcat " VERSION "\n\n"
-    "There is NO warranty. You may redistribute this software\n"
-    "under the terms of the GNU General Public License.\n"
-    "For more information about these matters, see the file named COPYING.\n\n");
+  fprintf(stderr, "shellcat " VERSION "\n");
 }
 
 inline size_t fprint(FILE *stream, char *str, int len)
