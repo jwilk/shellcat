@@ -290,7 +290,6 @@ int main(int argc, char **argv)
         script_flush;
         if (!have_code)
             script_write("\'\n", 2);
-        script_write("exec <&-\n", 9);
         free(buffer);
         if (fclose(pipe) == EOF) {
             fail(pipepath);
