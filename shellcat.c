@@ -171,7 +171,7 @@ int main(int argc, char **argv)
     have_code = false;
 
     a = 0;
-    if (buftail[0] == '#' && buftail[1] == '!') // skip the #!... directive
+    if (buftail[0] == '#' && buftail[1] == '!') // skip the shebang
       for ( ; a < filesize; a++, buftail++)
       if (*buftail == '\n')
       {
