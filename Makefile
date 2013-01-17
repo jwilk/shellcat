@@ -1,4 +1,4 @@
-VERSION = $(shell sed -ne "1 s/^.* \([0-9.]\+\)$$/\\1/gp" < README)
+VERSION = $(shell head -n1 doc/changelog | cut -d ' ' -f2)
 
 CFLAGS_def += -DVERSION='"$(VERSION)"'
 ifndef TCC
