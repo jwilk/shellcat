@@ -66,7 +66,6 @@ static size_t fprint(FILE *stream, const char *str, int len)
 
 int main(int argc, char **argv)
 {
-  int a;
   const char *shell = "/bin/sh";
   bool opt_version = false;
   bool opt_help = false;
@@ -180,16 +179,16 @@ int main(int argc, char **argv)
     buftail = buffer;
     have_code = false;
 
-    a = 0;
+    size_t off = 0;
     if (buftail[0] == '#' && buftail[1] == '!') // skip the shebang
-      for ( ; a < filesize; a++, buftail++)
+      for ( ; off < filesize; off++, buftail++)
       if (*buftail == '\n')
       {
-        buftail++; a++;
+        buftail++; off++;
         break;
       }
     bufhead = buftail;
-    for ( ; a<filesize; a++, buftail++)
+    for ( ; off < filesize; off++, buftail++)
     {
       switch (buftail[0])
       {
@@ -207,22 +206,22 @@ int main(int argc, char **argv)
               script_flush_write("\'\n", 2, 2);
               have_code = true;
             }
-            buftail++; a++;
+            buftail++; off++;
           }
           break;
         case '-':
           if (have_code && buftail[1] == '$' && buftail[2] == '>')
           {
             script_flush_write("$>", 2, 3);
-            buftail++; a++;
+            buftail++; off++;
           }
           break;
         case '$':
           if (have_code && buftail[1] == '>')
           {
             script_flush_write("\nprintf '%s' \'", 14, 2);
-            buftail++; a++;
-            have_code=false;
+            buftail++; off++;
+            have_code = false;
           }
           break;
       }
