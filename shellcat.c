@@ -60,9 +60,11 @@ static void show_version(void)
     fprintf(stderr, "shellcat " VERSION "\n");
 }
 
-static size_t fprint(FILE *stream, const char *str, int len)
+static void fprint(FILE *stream, const char *str, int len)
 {
-    return fwrite(str, 1, len, stream);
+    if (fwrite(str, len, 1, stream) != 1) {
+        fail("fwrite");
+    }
 }
 
 int main(int argc, char **argv)
