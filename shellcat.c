@@ -225,7 +225,7 @@ int main(int argc, char **argv)
     script_flush;
     if (!have_code)
       script_write("\'\n", 2);
-    script_write("exec <&-\n", 10);
+    script_write("exec <&-\n", 9);
     if (pclose(outstream) == -1)
       xerror(shell);
     close(STDIN_FILENO_DUP);
