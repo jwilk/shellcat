@@ -131,7 +131,12 @@ int main(int argc, char **argv)
     // that i-th char is not '\0'
     if (buffer == NULL)
       xerror("memory allocation");
-    fread(buffer, 1, filesize, instream);
+    if (fread(buffer, filesize, 1, instream) != 1) {
+      if (!ferror(instream)) {
+        errno = EBUSY;
+      }
+      xerror("fread");
+    }
     buffer[filesize] = '\0';
     if (ferror(instream))
       xerror(filename);
