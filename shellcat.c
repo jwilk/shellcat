@@ -36,12 +36,6 @@
 
 #define xerror(str) { realxerror(str, *argv); }
 
-#ifdef DEBUG
-#  define debug(str) { fprintf(stderr, "/* %s */\n", str); } 
-#else
-#  define debug(str) {}
-#endif
-
 #define STDIN_FILENO_DUP 3
 
 inline void realxerror(char *str, char* pname)
@@ -154,15 +148,11 @@ int main(int argc, char **argv)
     if (fclose(instream) == EOF)
       xerror(filename);
                 
-#ifndef DEBUG
     if (dup2(STDIN_FILENO, STDIN_FILENO_DUP) == -1)
       xerror("dup2");
     outstream = popen(shell, "w");
     if (outstream == NULL)
       xerror(shell);
-#else
-    outstream = stdout;
-#endif
 
 #define script_flush \
   do { fprint(outstream, bufhead, buftail-bufhead); bufhead = buftail; } while (false)
@@ -242,11 +232,9 @@ int main(int argc, char **argv)
     if (!have_code) 
       script_write("\'\n", 2);
     script_write("exec <&-\n", 10);
-#ifndef DEBUG
     if (fclose(outstream) == EOF)
       xerror(shell);
     close(STDIN_FILENO_DUP);
-#endif
     free(buffer);
   }
   return EXIT_SUCCESS;
