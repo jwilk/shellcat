@@ -32,13 +32,13 @@
 #  define VERSION "(devel)"
 #endif
 
-#define xerror(str) { realxerror(str, *argv); }
-
 #define STDIN_FILENO_DUP 3
 
-static void realxerror(const char *str, const char* pname)
+static const char *progname = "shellcat";
+
+static void fail(const char *s)
 {
-  fprintf(stderr,"%s: %s: %s\n", pname, str, strerror(errno));
+  fprintf(stderr,"%s: %s: %s\n", progname, s, strerror(errno));
   exit(EXIT_FAILURE);
 }
 
@@ -118,36 +118,35 @@ int main(int argc, char **argv)
     filename = argv[optind++];
     instream = fopen(filename, "r");
     if (instream == NULL)
-      xerror(filename);
+      fail(filename);
     if (fseek(instream, 0, SEEK_END) == -1)
-      xerror(filename);
+      fail(filename);
     filesize = ftell(instream);
     if (filesize == -1)
-      xerror(filename);
+      fail(filename);
     if (fseek(instream, 0, SEEK_SET) == -1)
-      xerror(filename);
+      fail(filename);
     buffer = (char*)malloc(filesize + 1);
     // The `+1' is enough. Indeed, we look at (i+1)-th char only if we're sure
     // that i-th char is not '\0'
     if (buffer == NULL)
-      xerror("memory allocation");
+      fail("malloc");
     if (fread(buffer, filesize, 1, instream) != 1) {
-      if (!ferror(instream)) {
+      if (!ferror(instream))
         errno = EBUSY;
-      }
-      xerror("fread");
+      fail(filename);
     }
     buffer[filesize] = '\0';
     if (ferror(instream))
-      xerror(filename);
+      fail(filename);
     if (fclose(instream) == EOF)
-      xerror(filename);
+      fail(filename);
 
     if (dup2(STDIN_FILENO, STDIN_FILENO_DUP) == -1)
-      xerror("dup2");
+      fail("dup2");
     outstream = popen(shell, "w");
     if (outstream == NULL)
-      xerror(shell);
+      fail(shell);
 
 #define script_flush \
   do { fprint(outstream, bufhead, buftail-bufhead); bufhead = buftail; } while (false)
@@ -228,7 +227,7 @@ int main(int argc, char **argv)
       script_write("\'\n", 2);
     script_write("exec <&-\n", 9);
     if (pclose(outstream) == -1)
-      xerror(shell);
+      fail(shell);
     close(STDIN_FILENO_DUP);
     free(buffer);
   }
