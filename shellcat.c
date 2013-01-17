@@ -20,12 +20,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef LARGEBUFFER
-#  define BUFFER_SIZE (1 << 14)
-#else
-#  define BUFFER_SIZE (1 << 10)
-#endif
-
 #ifdef VERSION
 #  define C_VERSION VERSION
 #else
@@ -76,7 +70,7 @@ inline size_t fprint(FILE *stream, char *str, int len)
 int main(int argc, char **argv)
 {
   int a;
-  char shell[BUFFER_SIZE];
+  char shell[BUFSIZ];
   bool opt_version = false;
   bool opt_help = false;
 
@@ -108,8 +102,8 @@ int main(int argc, char **argv)
       case 's':
         if (optarg)
         {
-          strncpy(shell, optarg, BUFFER_SIZE-1);
-          shell[BUFFER_SIZE-1] = 0;
+          strncpy(shell, optarg, BUFSIZ-1);
+          shell[BUFSIZ-1] = 0;
         }
         else
           *shell = '\0';

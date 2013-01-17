@@ -1,6 +1,5 @@
 VERSION = $(shell sed -ne "1 s/^.* \([0-9.]\+\)$$/\\1/gp" < README)
 
-CFLAGS_def := -DLARGEBUFFER
 CFLAGS_def += -DVERSION='"$(VERSION)"'
 ifndef TCC
 	CC = gcc
