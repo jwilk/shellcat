@@ -28,10 +28,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef VERSION
-#  define C_VERSION VERSION
-#else
-#  define C_VERSION "(devel)"
+#ifndef VERSION
+#  define VERSION "(devel)"
 #endif
 
 #define xerror(str) { realxerror(str, *argv); }
@@ -58,7 +56,7 @@ inline void show_usage(char* progname)
 inline void show_version(void)
 {
   fprintf(stderr,
-    "shellcat " C_VERSION "\n\n"
+    "shellcat " VERSION "\n\n"
     "There is NO warranty. You may redistribute this software\n"
     "under the terms of the GNU General Public License.\n"
     "For more information about these matters, see the file named COPYING.\n\n");
