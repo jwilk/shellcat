@@ -60,7 +60,7 @@ static void show_version(void)
 
 static size_t fprint(FILE *stream, const char *str, int len)
 {
-  return fwrite(str, sizeof(char), len, stream);
+  return fwrite(str, 1, len, stream);
 }
 
 int main(int argc, char **argv)
@@ -131,12 +131,12 @@ int main(int argc, char **argv)
       xerror(filename);
     if (fseek(instream, 0, SEEK_SET) == -1)
       xerror(filename);
-    buffer = (char*)calloc(filesize+1, sizeof(char));
+    buffer = (char*)calloc(filesize+1, 1);
     // The `+1' is enough. Indeed, we look at (i+1)-th char only if we're sure
     // that i-th char is not '\0'
     if (buffer == NULL)
       xerror("memory allocation");
-    fread(buffer, sizeof(char), filesize, instream);
+    fread(buffer, 1, filesize, instream);
     if (ferror(instream))
       xerror(filename);
     if (fclose(instream) == EOF)
