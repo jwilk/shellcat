@@ -70,6 +70,36 @@ static void fprint(FILE *stream, const char *str, int len)
     }
 }
 
+void read_input(const char *path, char **buffer, size_t *size)
+{
+    FILE *file = fopen(path, "r");
+    if (file == NULL)
+        fail(path);
+    if (fseek(file, 0, SEEK_END) == -1)
+        fail(path);
+    long lsize = ftell(file);
+    if (lsize == -1)
+        fail(path);
+    if (lsize >= SIZE_MAX) {
+        errno = EOVERFLOW;
+        fail(path);
+    }
+    if (fseek(file, 0, SEEK_SET) == -1)
+        fail(path);
+    *size = lsize;
+    *buffer = malloc(*size + 1);
+    if (*buffer == NULL)
+        fail("malloc");
+    if (fread(*buffer, *size, 1, file) != 1) {
+        if (!ferror(file))
+            errno = EBUSY;
+        fail(path);
+    }
+    buffer[*size] = '\0';
+    if (fclose(file) == EOF)
+        fail(path);
+}
+
 char * create_pipe()
 {
     int rc;
@@ -164,41 +194,12 @@ int main(int argc, char **argv)
     else
     {
         bool have_code;
-        long filesize;
         char *filename;
         char *buffer, *buftail, *bufhead;
-        FILE *instream;
+        size_t input_size;
 
         filename = argv[optind++];
-        instream = fopen(filename, "r");
-        if (instream == NULL)
-            fail(filename);
-        if (fseek(instream, 0, SEEK_END) == -1)
-            fail(filename);
-        filesize = ftell(instream);
-        if (filesize == -1)
-            fail(filename);
-        if (filesize >= SIZE_MAX) {
-            errno = EOVERFLOW;
-            fail(filename);
-        }
-        if (fseek(instream, 0, SEEK_SET) == -1)
-            fail(filename);
-        buffer = (char*)malloc(filesize + 1);
-        // The `+1' is enough. Indeed, we look at (i+1)-th char only if we're sure
-        // that i-th char is not '\0'
-        if (buffer == NULL)
-            fail("malloc");
-        if (fread(buffer, filesize, 1, instream) != 1) {
-            if (!ferror(instream))
-                errno = EBUSY;
-            fail(filename);
-        }
-        buffer[filesize] = '\0';
-        if (ferror(instream))
-            fail(filename);
-        if (fclose(instream) == EOF)
-            fail(filename);
+        read_input(filename, &buffer, &input_size);
 
         char * pipepath = create_pipe();
         signal(SIGCHLD, sigchld_handler);
@@ -241,14 +242,14 @@ int main(int argc, char **argv)
 
         size_t off = 0;
         if (buftail[0] == '#' && buftail[1] == '!') // skip the shebang
-            for ( ; off < filesize; off++, buftail++)
+            for ( ; off < input_size; off++, buftail++)
                 if (*buftail == '\n')
                 {
                     buftail++; off++;
                     break;
                 }
         bufhead = buftail;
-        for ( ; off < filesize; off++, buftail++)
+        for ( ; off < input_size; off++, buftail++)
         {
             switch (buftail[0])
             {
