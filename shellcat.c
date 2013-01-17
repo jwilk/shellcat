@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     int c = getopt_long(argc, argv, "vhs:", options, &optindex);
     if (c < 0) break;
     if (c == 0) c = options[optindex].val;
-    switch(c)
+    switch (c)
     {
       case 'v':
         opt_version = true;
@@ -211,7 +211,7 @@ int main(int argc, char **argv)
           }
           break;
         case '-':
-          if (have_code && buftail[1]=='$' && buftail[2]=='>')
+          if (have_code && buftail[1] == '$' && buftail[2] == '>')
           {
             script_flush_write("$>", 2, 3);
             buftail++; a++;
