@@ -126,12 +126,13 @@ int main(int argc, char **argv)
       xerror(filename);
     if (fseek(instream, 0, SEEK_SET) == -1)
       xerror(filename);
-    buffer = (char*)calloc(filesize+1, 1);
+    buffer = (char*)malloc(filesize + 1);
     // The `+1' is enough. Indeed, we look at (i+1)-th char only if we're sure
     // that i-th char is not '\0'
     if (buffer == NULL)
       xerror("memory allocation");
     fread(buffer, 1, filesize, instream);
+    buffer[filesize] = '\0';
     if (ferror(instream))
       xerror(filename);
     if (fclose(instream) == EOF)
