@@ -36,13 +36,13 @@
 
 #define STDIN_FILENO_DUP 3
 
-inline void realxerror(char *str, char* pname)
+static void realxerror(char *str, char* pname)
 {
   fprintf(stderr,"%s: %s: %s\n", pname, str, strerror(errno));
   exit(EXIT_FAILURE);
 }
 
-inline void show_usage(char* progname)
+static void show_usage(char* progname)
 {
   fprintf(stderr,
     "Usage: %s [options] [file [arguments]]\n\n"
@@ -53,12 +53,12 @@ inline void show_usage(char* progname)
     progname);
 }
 
-inline void show_version(void)
+static void show_version(void)
 {
   fprintf(stderr, "shellcat " VERSION "\n");
 }
 
-inline size_t fprint(FILE *stream, char *str, int len)
+static size_t fprint(FILE *stream, char *str, int len)
 {
   return fwrite(str, sizeof(char), len, stream);
 }
