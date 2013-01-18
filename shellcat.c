@@ -230,7 +230,7 @@ int main(int argc, char **argv)
     do { script_flush; script_write(str, len); bufhead += add; } while (false)
 
         script_write("set - ", 6);
-        while (optind < argc) // forward parameters to the script
+        while (optind < argc) /* forward parameters to the script */
         {
             const char* arg = argv[optind++];
             script_write("\'", 1);
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
         have_code = false;
 
         size_t off = 0;
-        if (buftail[0] == '#' && buftail[1] == '!') // skip the shebang
+        if (buftail[0] == '#' && buftail[1] == '!') /* skip the shebang */
             for ( ; off < input_size; off++, buftail++)
                 if (*buftail == '\n')
                 {
@@ -309,4 +309,4 @@ int main(int argc, char **argv)
     return rc;
 }
 
-// vim:ts=4 sw=4 et
+/* vim:set ts=4 sw=4 et: */
