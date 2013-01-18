@@ -139,6 +139,7 @@ void free_pipe(char *path)
 
 void sigchld_handler(int signal)
 {
+    (void) signal; /* unused */
     if (pipepath != NULL)
         free_pipe(pipepath);
     _exit(EXIT_FAILURE);
