@@ -221,6 +221,8 @@ int main(int argc, char **argv)
         if (pipe == NULL)
             fail(pipepath);
         signal(SIGCHLD, SIG_DFL);
+        free_pipe(pipepath);
+        pipepath = NULL;
 
 #define script_flush \
     do { fprint(pipe, bufhead, buftail-bufhead); bufhead = buftail; } while (false)
@@ -301,8 +303,6 @@ int main(int argc, char **argv)
         if (fclose(pipe) == EOF) {
             fail(pipepath);
         }
-        free_pipe(pipepath);
-        pipepath = NULL;
         if (reap_child() != 0)
             rc = EXIT_FAILURE;
     }
