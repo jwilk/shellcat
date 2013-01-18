@@ -83,7 +83,7 @@ void read_input(const char *path, char **buffer, size_t *size)
     long lsize = ftell(file);
     if (lsize == -1)
         fail(path);
-    if (lsize >= SIZE_MAX) {
+    if ((unsigned long)lsize >= SIZE_MAX) {
         errno = EOVERFLOW;
         fail(path);
     }
