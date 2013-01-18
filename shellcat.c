@@ -209,7 +209,8 @@ int main(int argc, char **argv)
         read_input(filename, &buffer, &input_size);
 
         pipepath = create_pipe();
-        signal(SIGCHLD, sigchld_handler);
+        if (signal(SIGCHLD, sigchld_handler) == SIG_ERR)
+            fail("signal");
         switch (fork()) {
             case -1:
                 fail("fork");
@@ -220,7 +221,8 @@ int main(int argc, char **argv)
         FILE * pipe = fopen(pipepath, "w");
         if (pipe == NULL)
             fail(pipepath);
-        signal(SIGCHLD, SIG_DFL);
+        if (signal(SIGCHLD, SIG_DFL) == SIG_ERR)
+            fail("signal");
         free_pipe(pipepath);
         pipepath = NULL;
 
