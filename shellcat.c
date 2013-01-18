@@ -182,6 +182,8 @@ int main(int argc, char **argv)
                 if (optarg)
                     shell = optarg;
                 break;
+            case '?':
+                return EXIT_FAILURE;
             default:
                 break;
         }
