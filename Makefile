@@ -1,6 +1,6 @@
 version = $(shell head -n1 doc/changelog | cut -d ' ' -f2)
 
-CFLAGS = -g -O2 -Wall -Wformat
+CFLAGS = -g -O2 -Wall -Wformat -Wextra
 CPPFLAGS += -DVERSION='"$(version)"'
 
 .PHONY: all
