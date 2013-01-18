@@ -40,6 +40,9 @@
 
 static const char *progname = "shellcat";
 
+char * pipepath = NULL; /* this needs to be global, so that we can remove
+                           the pipe in the SIGCHLD handler */
+
 static void fail(const char *s)
 {
     fprintf(stderr,"%s: %s: %s\n", progname, s, strerror(errno));
@@ -136,6 +139,8 @@ void free_pipe(char *path)
 
 void sigchld_handler(int signal)
 {
+    if (pipepath != NULL)
+        free_pipe(pipepath);
     _exit(EXIT_FAILURE);
 }
 
@@ -203,7 +208,7 @@ int main(int argc, char **argv)
         filename = argv[optind++];
         read_input(filename, &buffer, &input_size);
 
-        char * pipepath = create_pipe();
+        pipepath = create_pipe();
         signal(SIGCHLD, sigchld_handler);
         switch (fork()) {
             case -1:
@@ -297,6 +302,7 @@ int main(int argc, char **argv)
             fail(pipepath);
         }
         free_pipe(pipepath);
+        pipepath = NULL;
         if (reap_child() != 0)
             rc = EXIT_FAILURE;
     }
