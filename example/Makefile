@@ -1,11 +1,12 @@
 sources = $(wildcard [a-z]*.sc)
 pages = $(sources:.sc=.html)
+shellcat = $(shell which shell || echo ../shellcat)
 
 .PHONY: all
 all: $(pages)
 
-%.html: %.sc
-	shellcat _template.sc $(<) > $(@).tmp
+%.html: %.sc $(shellcat)
+	$(shellcat) _template.sc $(<) > $(@).tmp
 	mv $(@).tmp $(@)
 
 .PHONY: clean

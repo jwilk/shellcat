@@ -1,13 +1,13 @@
 <html>
 <head>
-  <title><$ shellcat "$1" title $></title>
+  <title><$ "$SHELLCAT" "$1" title $></title>
 </head>
 <body>
   <div class='sidebar'>
-     <$ shellcat _sidebar.sc $>
+     <$ "$SHELLCAT" _sidebar.sc $>
   </div>
   <div class='body'>
-     <$ shellcat "$1" body $>
+     <$ "$SHELLCAT" "$1" body $>
   </div>
 </body>
 </html>
