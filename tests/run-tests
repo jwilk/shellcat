@@ -15,7 +15,7 @@ do
     [ -x "$test" ] || continue
     printf '%s ... ' "$test"
     rm -f "${test}.err"
-    if "./$test" > "${test}.err"
+    if ( "./$test" 2>&1 ) > "${test}.err"
     then
         rm -f "${test}.err"
         printf 'ok\n'
