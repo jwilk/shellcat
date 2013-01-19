@@ -49,7 +49,7 @@ static void fail(const char *s)
     exit(EXIT_FAILURE);
 }
 
-static void show_usage(const char* progname)
+static void show_usage()
 {
     fprintf(stderr,
         "Usage: %s [options] [file [arguments]]\n\n"
@@ -163,6 +163,8 @@ int main(int argc, char **argv)
     bool opt_version = false;
     bool opt_help = false;
 
+    progname = argv[0];
+
     while (true)
     {
         static struct option options[] =
@@ -200,7 +202,7 @@ int main(int argc, char **argv)
     if (opt_version)
         show_version();
     else if (opt_help || optind >= argc)
-        show_usage(*argv);
+        show_usage();
     else
     {
         bool have_code;
