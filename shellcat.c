@@ -212,9 +212,6 @@ int main(int argc, char **argv)
         char *buffer, *buftail, *bufhead;
         size_t input_size;
 
-        filename = argv[optind++];
-        read_input(filename, &buffer, &input_size);
-
         pipepath = create_pipe();
         if (signal(SIGCHLD, sigchld_handler) == SIG_ERR)
             fail("signal");
@@ -232,6 +229,9 @@ int main(int argc, char **argv)
             fail("signal");
         free_pipe(pipepath);
         pipepath = NULL;
+
+        filename = argv[optind++];
+        read_input(filename, &buffer, &input_size);
 
 #define script_flush \
     do { fprint(pipe, bufhead, buftail-bufhead); bufhead = buftail; } while (false)
