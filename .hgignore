@@ -1,3 +1,4 @@
 syntax: glob
-shellcat
+
 example/*.html
+shellcat
