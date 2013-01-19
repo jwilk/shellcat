@@ -95,12 +95,12 @@ void read_input(const char *path, char **buffer, size_t *size)
     *buffer = malloc(*size + 1);
     if (*buffer == NULL)
         fail("malloc");
-    if (fread(*buffer, *size, 1, file) != 1) {
+    if (*size > 0 && fread(*buffer, *size, 1, file) != 1) {
         if (!ferror(file))
             errno = EBUSY;
         fail(path);
     }
-    buffer[*size] = '\0';
+    (*buffer)[*size] = '\0';
     if (fclose(file) == EOF)
         fail(path);
 }
