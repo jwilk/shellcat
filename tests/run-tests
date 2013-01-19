@@ -1,0 +1,52 @@
+#!/bin/sh
+set -e -u
+
+export shellcat=${1:-../shellcat}
+
+hr()
+{
+    printf '%s\n' $(yes "$1" | head -n 60 | tr -d '\n')
+}
+
+n_ok=0
+n_fail=0
+for test in test-*
+do
+    [ -x "$test" ] || continue
+    printf '%s ... ' "$test"
+    rm -f "${test}.err"
+    if "./$test" > "${test}.err"
+    then
+        rm -f "${test}.err"
+        printf 'ok\n'
+        n_ok=$(($n_ok + 1))
+    else
+        printf 'FAIL\n'
+        n_fail=$(($n_fail + 1))
+    fi
+done
+
+printf '\n'
+
+for test in test-*
+do
+    [ -x "$test" ] || continue
+    [ -e "${test}.err" ] || continue
+    hr '='
+    printf 'FAILED: %s\n' "$test"
+    hr '-'
+    cat "${test}.err"
+    hr '='
+    printf '\n'
+done
+
+if [ $n_fail -gt 0 ]
+then
+    printf 'FAILED (failures=%d)\n' $n_fail
+    exit 1
+else
+    printf 'OK\n'
+    exit 0
+fi
+
+# vim:ts=4 sw=4 et

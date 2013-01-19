@@ -2,3 +2,5 @@ syntax: glob
 
 example/*.html
 shellcat
+tests/*.err
+tests/*.out
