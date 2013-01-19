@@ -234,7 +234,7 @@ int main(int argc, char **argv)
         read_input(filename, &buffer, &input_size);
 
 #define script_flush \
-    do { fprint(pipe, bufhead, buftail-bufhead); bufhead = buftail; } while (false)
+    do { fprint(pipe, bufhead, buftail - bufhead); bufhead = buftail; } while (false)
 #define script_write(str, len) \
     do { fprint(pipe, str, len); } while(false)
 #define script_flush_write(str, len, add) \
