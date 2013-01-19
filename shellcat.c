@@ -164,6 +164,8 @@ int main(int argc, char **argv)
     bool opt_help = false;
 
     progname = argv[0];
+    if (setenv("SHELLCAT", progname, false) != 0)
+        fail("setenv");
 
     while (true)
     {
