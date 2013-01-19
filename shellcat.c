@@ -275,6 +275,10 @@ int main(int argc, char **argv)
                     if (!have_code)
                         script_flush_write("'\\''", 4, 1);
                     break;
+                case '\000':
+                    if (!have_code)
+                        script_flush_write("\'\nprintf '\\000%s' \'", 20, 1);
+                    break;
                 case '<':
                     if (!have_code && buftail[1] == '$')
                     {
