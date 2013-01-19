@@ -1,3 +1,5 @@
+set -e -u
+
 shellcat=${shellcat:-../shellcat}
 base="${0}"
 f_input="${base}.in"
