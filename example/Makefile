@@ -5,6 +5,9 @@ shellcat = $(shell which shell || echo ../shellcat)
 .PHONY: all
 all: $(pages)
 
+../shellcat:
+	$(MAKE) -C ..
+
 %.html: %.sc $(shellcat)
 	$(shellcat) _template.sc $(<) > $(@).tmp
 	mv $(@).tmp $(@)
