@@ -70,9 +70,8 @@ static void fprint(FILE *stream, const char *str, int len)
 {
     if (len == 0)
         return;
-    if (fwrite(str, len, 1, stream) != 1) {
+    if (fwrite(str, len, 1, stream) != 1)
         fail("fwrite");
-    }
 }
 
 void read_input(const char *path, char **buffer, size_t *size)
@@ -85,7 +84,8 @@ void read_input(const char *path, char **buffer, size_t *size)
     long lsize = ftell(file);
     if (lsize == -1)
         fail(path);
-    if ((unsigned long)lsize >= SIZE_MAX) {
+    if ((unsigned long)lsize >= SIZE_MAX)
+    {
         errno = EOVERFLOW;
         fail(path);
     }
@@ -95,7 +95,8 @@ void read_input(const char *path, char **buffer, size_t *size)
     *buffer = malloc(*size + 1);
     if (*buffer == NULL)
         fail("malloc");
-    if (*size > 0 && fread(*buffer, *size, 1, file) != 1) {
+    if (*size > 0 && fread(*buffer, *size, 1, file) != 1)
+    {
         if (!ferror(file))
             errno = EBUSY;
         fail(path);
@@ -113,9 +114,8 @@ char * create_pipe()
     if (tmpdir == NULL)
         tmpdir = "/tmp";
     path = malloc(strlen(tmpdir) + 22);
-    if (path == NULL) {
+    if (path == NULL)
         fail("malloc");
-    }
     sprintf(path, "%s/shellcat.XXXXXX", tmpdir);
     if (mkdtemp(path) == NULL)
         fail("mkdtemp");
@@ -150,9 +150,8 @@ void sigchld_handler(int signal)
 int reap_child()
 {
     int rc;
-    if (wait(&rc) == -1) {
+    if (wait(&rc) == -1)
         fail("wait");
-    }
     return rc;
 }
 
@@ -215,7 +214,8 @@ int main(int argc, char **argv)
         pipepath = create_pipe();
         if (signal(SIGCHLD, sigchld_handler) == SIG_ERR)
             fail("signal");
-        switch (fork()) {
+        switch (fork())
+        {
             case -1:
                 fail("fork");
             case 0:
@@ -309,9 +309,8 @@ int main(int argc, char **argv)
         if (!have_code)
             script_write("\'\n", 2);
         free(buffer);
-        if (fclose(pipe) == EOF) {
+        if (fclose(pipe) == EOF)
             fail(pipepath);
-        }
         if (reap_child() != 0)
             rc = EXIT_FAILURE;
     }
