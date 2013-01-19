@@ -7,6 +7,6 @@ all: ../shellcat
 
 .PHONY: clean
 clean:
-	rm -rf *.out *.err
+	rm -rf *.err *.out *.tmp
 
 # vim:ts=4 sw=4 noet

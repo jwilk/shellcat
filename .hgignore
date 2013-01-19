@@ -4,3 +4,4 @@ example/*.html
 shellcat
 tests/*.err
 tests/*.out
+tests/*.tmp
