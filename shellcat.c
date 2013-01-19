@@ -68,6 +68,8 @@ static void show_version(void)
 
 static void fprint(FILE *stream, const char *str, int len)
 {
+    if (len == 0)
+        return;
     if (fwrite(str, len, 1, stream) != 1) {
         fail("fwrite");
     }
