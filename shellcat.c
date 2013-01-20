@@ -139,6 +139,7 @@ void process_input(FILE *pipe, char **argv)
     FILE * input = fopen(filename, "r");
     if (input == NULL)
         fail(filename);
+
     enum {
         STATE_BEGIN,
         STATE_HASH,
@@ -322,6 +323,9 @@ void process_input(FILE *pipe, char **argv)
 #undef sflush
 #undef srewind
 #undef sreset
+
+    if (fclose(input) == EOF)
+        fail(filename);
 
 }
 
