@@ -1,0 +1,1 @@
+<$ yes eggs | head -n1 $>bacon, <$ yes spam | head -n1 $>baked <$ yes beans | head -n1 $>
