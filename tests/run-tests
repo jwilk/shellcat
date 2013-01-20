@@ -10,12 +10,12 @@ hr()
 
 n_ok=0
 n_fail=0
-for test in test-*
+for file in test-*.t
 do
-    [ -x "$test" ] || continue
+    test="${file%.t}"
     printf '%s ... ' "$test"
     rm -f "${test}.err"
-    if ( "./$test" 2>&1 ) > "${test}.err"
+    if ( "./$file" 2>&1 ) > "${test}.err"
     then
         rm -f "${test}.err"
         printf 'ok\n'
@@ -28,9 +28,9 @@ done
 
 printf '\n'
 
-for test in test-*
+for file in test-*.t
 do
-    [ -x "$test" ] || continue
+    test="${file%.t}"
     [ -e "${test}.err" ] || continue
     hr '='
     printf 'FAILED: %s\n' "$test"

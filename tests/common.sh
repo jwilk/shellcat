@@ -1,7 +1,7 @@
 set -e -u
 
 shellcat=${shellcat:-../shellcat}
-base="${0}"
+base="${0%.t}"
 f_input="${base}.in"
 f_expected="${base}.exp"
 f_output="${base}.out"
