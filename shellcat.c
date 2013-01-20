@@ -245,7 +245,7 @@ void process_input(FILE *pipe, char **argv)
     free(buffer);
 #undef script_flush
 #undef script_write
-#undef script_flush_write        
+#undef script_flush_write
 }
 
 int main(int argc, char **argv)
