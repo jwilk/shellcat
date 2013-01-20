@@ -19,4 +19,4 @@ done \
 > "$f_input"
 run_shellcat
 
-# vim:ts=4 sw=4 et
+# vim:ft=sh ts=4 sw=4 et
