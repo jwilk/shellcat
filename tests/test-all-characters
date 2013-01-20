@@ -1,5 +1,4 @@
 #!/bin/sh
-
 . ./common.sh
 
 f_input="${base}.tmp"
