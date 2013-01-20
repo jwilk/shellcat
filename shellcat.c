@@ -382,7 +382,6 @@ int main(int argc, char **argv)
         show_usage();
     else
     {
-
         pipepath = create_pipe();
         if (signal(SIGCHLD, sigchld_handler) == SIG_ERR)
             fail("signal");
@@ -401,9 +400,7 @@ int main(int argc, char **argv)
             fail("signal");
         free_pipe(pipepath);
         pipepath = NULL;
-
         process_input(pipe, argv + optind);
-
         if (fclose(pipe) == EOF)
             fail(pipepath);
         if (reap_child() != 0)
