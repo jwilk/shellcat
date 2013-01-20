@@ -352,11 +352,11 @@ int main(int argc, char **argv)
             { NULL,      0, 0, '\0' }
         };
 
-        int optindex = 0;
+        int longindex = 0;
 
-        int c = getopt_long(argc, argv, "vhs:", options, &optindex);
+        int c = getopt_long(argc, argv, "vhs:", options, &longindex);
         if (c < 0) break;
-        if (c == 0) c = options[optindex].val;
+        if (c == 0) c = options[longindex].val;
         switch (c)
         {
             case 'v':
