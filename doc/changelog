@@ -35,7 +35,7 @@ shellcat 0.02 (released on 2001-08-30)
 --------------------------------------
 * Improve error handling.
 * Fix minor bugs.
-* The ``<$-`` and ``-$>`` sequences are special.
+* The ``<$-`` and ``-$>`` sequences are now special.
 
 shellcat 0.01 (released on 2001-08-23)
 --------------------------------------
