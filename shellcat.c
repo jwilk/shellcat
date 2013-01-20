@@ -66,46 +66,6 @@ static void show_version(void)
     fprintf(stderr, "shellcat " VERSION "\n");
 }
 
-static void fprint(FILE *stream, const char *str, size_t len)
-{
-    if (len == 0)
-        return;
-    if (fwrite(str, len, 1, stream) != 1)
-        fail("fwrite");
-}
-
-void read_input(const char *path, char **buffer, size_t *size)
-{
-    FILE *file = fopen(path, "r");
-    if (file == NULL)
-        fail(path);
-    if (fseek(file, 0, SEEK_END) == -1)
-        fail(path);
-    long lsize = ftell(file);
-    if (lsize == -1)
-        fail(path);
-    if ((unsigned long)lsize >= SIZE_MAX)
-    {
-        errno = EOVERFLOW;
-        fail(path);
-    }
-    if (fseek(file, 0, SEEK_SET) == -1)
-        fail(path);
-    *size = lsize;
-    *buffer = malloc(*size + 1);
-    if (*buffer == NULL)
-        fail("malloc");
-    if (*size > 0 && fread(*buffer, *size, 1, file) != 1)
-    {
-        if (!ferror(file))
-            errno = EBUSY;
-        fail(path);
-    }
-    (*buffer)[*size] = '\0';
-    if (fclose(file) == EOF)
-        fail(path);
-}
-
 char * create_pipe()
 {
     int rc;
@@ -157,95 +117,212 @@ int reap_child()
 
 void process_input(FILE *pipe, char **argv)
 {
-    char *buffer, *buftail, *bufhead;
-    size_t input_size;
-    bool have_code;
+    const char *filename = *argv++;
 
-    read_input(*argv++, &buffer, &input_size);
+#define sputs(s) do { fputs(s, pipe); } while (0)
+#define sputc(c) do { fputc(c, pipe); } while (0)
 
-#define script_flush \
-    do { fprint(pipe, bufhead, buftail - bufhead); bufhead = buftail; } while (false)
-#define script_write(str, len) \
-    do { fprint(pipe, str, len); } while(false)
-#define script_flush_write(str, len, add) \
-    do { script_flush; script_write(str, len); bufhead += add; } while (false)
-
-    script_write("set - ", 6);
+    sputs("set - ");
     for (; *argv != NULL; argv++) /* forward parameters to the script */
     {
         const char* arg = *argv;
-        script_write("\'", 1);
-        while (*arg)
+        sputs("\'");
+        for (; *arg; arg++)
         {
             if (*arg == '\'')
-                script_write("'\\'", 3);
-            script_write(arg, 1);
-            arg++;
+                sputs("'\\'");
+            sputc(*arg);
         }
-        script_write("\' ", 2);
+        sputs("\' ");
     }
-    script_write("\nprintf '%s' \'", 14);
-    buftail = buffer;
-    have_code = false;
-
-    size_t off = 0;
-    if (buftail[0] == '#' && buftail[1] == '!') /* skip the shebang */
-        for ( ; off < input_size; off++, buftail++)
-            if (*buftail == '\n')
-            {
-                buftail++; off++;
-                break;
-            }
-    bufhead = buftail;
-    for ( ; off < input_size; off++, buftail++)
+    sputs("\nprintf '%s' \'");
+    FILE * input = fopen(filename, "r");
+    if (input == NULL)
+        fail(filename);
+    enum {
+        STATE_BEGIN,
+        STATE_HASH,
+        STATE_HASH_BANG,
+        STATE_TEXT,
+        STATE_TEXT_LT,
+        STATE_TEXT_LT_DOLLAR,
+        STATE_CODE,
+        STATE_CODE_DOLLAR,
+        STATE_CODE_MINUS,
+        STATE_CODE_MINUS_DOLLAR,
+    } state = STATE_BEGIN;
+    while (!feof(input))
     {
-        switch (buftail[0])
+        char buffer[BUFSIZ];
+        const char *bufhead, *buftail;
+        bufhead = buftail = buffer;
+        size_t size = fread(buffer, 1, sizeof buffer, input);
+        if (ferror(input))
+            fail(filename);
+
+#define sflush(newstate) \
+    do { \
+        if (buftail > bufhead && \
+            fwrite(bufhead, buftail - bufhead, 1, pipe) != 1) \
+                fail("fwrite"); \
+        bufhead = buftail + 1; \
+        state = newstate; \
+    } while (0)
+
+#define srewind(newstate) \
+    do { \
+        bufhead = buftail; \
+        state = newstate; \
+        goto rewind; \
+    } while (0)
+
+#define sreset(newstate) \
+    do { \
+        bufhead = buftail + 1; \
+        state = newstate; \
+    } while (0)
+
+        for (; size > 0U; buftail++, size--)
         {
-            case '\'':
-                if (!have_code)
-                    script_flush_write("'\\''", 4, 1);
-                break;
-            case '\000':
-                if (!have_code)
-                    script_flush_write("\'\nprintf '\\000%s' \'", 20, 1);
-                break;
-            case '<':
-                if (!have_code && buftail[1] == '$')
-                {
-                    if (buftail[2] == '-')
-                        script_flush_write("<\\$", 3, 3);
+            const char ch = *buftail;
+        rewind:
+            switch (state)
+            {
+                case STATE_BEGIN:
+                    if (ch == '#')
+                        state = STATE_HASH;
+                    else
+                        srewind(STATE_TEXT);
+                    break;
+                case STATE_HASH:
+                    if (ch == '!')
+                        sreset(STATE_HASH_BANG);
                     else
                     {
-                        script_flush_write("\'\n", 2, 2);
-                        have_code = true;
+                        sputc('#');
+                        srewind(STATE_TEXT);
                     }
-                    buftail++; off++;
-                }
-                break;
-            case '-':
-                if (have_code && buftail[1] == '$' && buftail[2] == '>')
-                {
-                    script_flush_write("$>", 2, 3);
-                    buftail++; off++;
-                }
-                break;
-            case '$':
-                if (have_code && buftail[1] == '>')
-                {
-                    script_flush_write("\nprintf '%s' \'", 14, 2);
-                    buftail++; off++;
-                    have_code = false;
-                }
-                break;
+                    break;
+                case STATE_HASH_BANG:
+                    if (ch == '\n')
+                        sreset(STATE_TEXT);
+                    else
+                        sreset(STATE_HASH_BANG);
+                    break;
+                case STATE_TEXT:
+                    switch (ch)
+                    {
+                        case '\'':
+                            sflush(STATE_TEXT);
+                            sputs("'\\''");
+                            break;
+                        case '\0':
+                            sflush(STATE_TEXT);
+                            sputs("'\nprintf '\\000%s' '");
+                            break;
+                        case '<':
+                            sflush(STATE_TEXT_LT);
+                            break;
+                    }
+                    break;
+                case STATE_TEXT_LT:
+                    switch (ch)
+                    {
+                        case '$':
+                            sreset(STATE_TEXT_LT_DOLLAR);
+                            break;
+                        default:
+                            sputc('<');
+                            srewind(STATE_TEXT);
+                            break;
+                    }
+                    break;
+                case STATE_TEXT_LT_DOLLAR:
+                    switch (ch)
+                    {
+                        case '-':
+                            sputs("<$");
+                            sreset(STATE_TEXT);
+                            break;
+                        default:
+                            sputs("'\n");
+                            srewind(STATE_CODE);
+                            break;
+                    }
+                    break;
+                case STATE_CODE:
+                    switch (ch)
+                    {
+                        case '-':
+                            sflush(STATE_CODE_MINUS);
+                            break;
+                        case '$':
+                            sflush(STATE_CODE_DOLLAR);
+                            break;
+                    }
+                    break;
+                case STATE_CODE_MINUS:
+                    switch (ch)
+                    {
+                        case '$':
+                            sreset(STATE_CODE_MINUS_DOLLAR);
+                            break;
+                        default:
+                            sputc('-');
+                            srewind(STATE_CODE);
+                            break;
+                    }
+                    break;
+                case STATE_CODE_MINUS_DOLLAR:
+                    switch (ch)
+                    {
+                        case '>':
+                            sputs("$>");
+                            sreset(STATE_CODE);
+                            break;
+                        default:
+                            sputs("-$");
+                            srewind(STATE_CODE);
+                            break;
+                    }
+                    break;
+                case STATE_CODE_DOLLAR:
+                    switch (ch)
+                    {
+                        case '>':
+                            sputs("\nprintf '%s' '");
+                            sreset(STATE_TEXT);
+                            break;
+                        default:
+                            sputc('$');
+                            srewind(STATE_CODE);
+                    }
+                    break;
+            }
         }
+        sflush(state);
     }
-    script_flush;
-    if (!have_code)
-        script_write("\'\n", 2);
-    free(buffer);
-#undef script_flush
-#undef script_write
-#undef script_flush_write
+
+    switch (state)
+    {
+        case STATE_BEGIN:
+        case STATE_HASH:
+        case STATE_HASH_BANG:
+        case STATE_TEXT:
+        case STATE_TEXT_LT:
+        case STATE_TEXT_LT_DOLLAR:
+            sputs("'\n");
+            break;
+        default:
+            break;
+    }
+
+#undef sputs
+#undef sputc
+#undef sflush
+#undef srewind
+#undef sreset
+
 }
 
 int main(int argc, char **argv)
