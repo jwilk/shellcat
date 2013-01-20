@@ -155,6 +155,99 @@ int reap_child()
     return rc;
 }
 
+void process_input(FILE *pipe, char **argv)
+{
+    char *buffer, *buftail, *bufhead;
+    size_t input_size;
+    bool have_code;
+
+    read_input(*argv++, &buffer, &input_size);
+
+#define script_flush \
+    do { fprint(pipe, bufhead, buftail - bufhead); bufhead = buftail; } while (false)
+#define script_write(str, len) \
+    do { fprint(pipe, str, len); } while(false)
+#define script_flush_write(str, len, add) \
+    do { script_flush; script_write(str, len); bufhead += add; } while (false)
+
+    script_write("set - ", 6);
+    for (; *argv != NULL; argv++) /* forward parameters to the script */
+    {
+        const char* arg = *argv;
+        script_write("\'", 1);
+        while (*arg)
+        {
+            if (*arg == '\'')
+                script_write("'\\'", 3);
+            script_write(arg, 1);
+            arg++;
+        }
+        script_write("\' ", 2);
+    }
+    script_write("\nprintf '%s' \'", 14);
+    buftail = buffer;
+    have_code = false;
+
+    size_t off = 0;
+    if (buftail[0] == '#' && buftail[1] == '!') /* skip the shebang */
+        for ( ; off < input_size; off++, buftail++)
+            if (*buftail == '\n')
+            {
+                buftail++; off++;
+                break;
+            }
+    bufhead = buftail;
+    for ( ; off < input_size; off++, buftail++)
+    {
+        switch (buftail[0])
+        {
+            case '\'':
+                if (!have_code)
+                    script_flush_write("'\\''", 4, 1);
+                break;
+            case '\000':
+                if (!have_code)
+                    script_flush_write("\'\nprintf '\\000%s' \'", 20, 1);
+                break;
+            case '<':
+                if (!have_code && buftail[1] == '$')
+                {
+                    if (buftail[2] == '-')
+                        script_flush_write("<\\$", 3, 3);
+                    else
+                    {
+                        script_flush_write("\'\n", 2, 2);
+                        have_code = true;
+                    }
+                    buftail++; off++;
+                }
+                break;
+            case '-':
+                if (have_code && buftail[1] == '$' && buftail[2] == '>')
+                {
+                    script_flush_write("$>", 2, 3);
+                    buftail++; off++;
+                }
+                break;
+            case '$':
+                if (have_code && buftail[1] == '>')
+                {
+                    script_flush_write("\nprintf '%s' \'", 14, 2);
+                    buftail++; off++;
+                    have_code = false;
+                }
+                break;
+        }
+    }
+    script_flush;
+    if (!have_code)
+        script_write("\'\n", 2);
+    free(buffer);
+#undef script_flush
+#undef script_write
+#undef script_flush_write        
+}
+
 int main(int argc, char **argv)
 {
     int rc = EXIT_SUCCESS;
@@ -206,10 +299,6 @@ int main(int argc, char **argv)
         show_usage();
     else
     {
-        bool have_code;
-        char *filename;
-        char *buffer, *buftail, *bufhead;
-        size_t input_size;
 
         pipepath = create_pipe();
         if (signal(SIGCHLD, sigchld_handler) == SIG_ERR)
@@ -230,89 +319,8 @@ int main(int argc, char **argv)
         free_pipe(pipepath);
         pipepath = NULL;
 
-        filename = argv[optind++];
-        read_input(filename, &buffer, &input_size);
+        process_input(pipe, argv + optind);
 
-#define script_flush \
-    do { fprint(pipe, bufhead, buftail - bufhead); bufhead = buftail; } while (false)
-#define script_write(str, len) \
-    do { fprint(pipe, str, len); } while(false)
-#define script_flush_write(str, len, add) \
-    do { script_flush; script_write(str, len); bufhead += add; } while (false)
-
-        script_write("set - ", 6);
-        while (optind < argc) /* forward parameters to the script */
-        {
-            const char* arg = argv[optind++];
-            script_write("\'", 1);
-            while (*arg)
-            {
-                if (*arg == '\'')
-                    script_write("'\\'", 3);
-                script_write(arg, 1);
-                arg++;
-            }
-            script_write("\' ", 2);
-        }
-        script_write("\nprintf '%s' \'", 14);
-        buftail = buffer;
-        have_code = false;
-
-        size_t off = 0;
-        if (buftail[0] == '#' && buftail[1] == '!') /* skip the shebang */
-            for ( ; off < input_size; off++, buftail++)
-                if (*buftail == '\n')
-                {
-                    buftail++; off++;
-                    break;
-                }
-        bufhead = buftail;
-        for ( ; off < input_size; off++, buftail++)
-        {
-            switch (buftail[0])
-            {
-                case '\'':
-                    if (!have_code)
-                        script_flush_write("'\\''", 4, 1);
-                    break;
-                case '\000':
-                    if (!have_code)
-                        script_flush_write("\'\nprintf '\\000%s' \'", 20, 1);
-                    break;
-                case '<':
-                    if (!have_code && buftail[1] == '$')
-                    {
-                        if (buftail[2] == '-')
-                            script_flush_write("<\\$", 3, 3);
-                        else
-                        {
-                            script_flush_write("\'\n", 2, 2);
-                            have_code = true;
-                        }
-                        buftail++; off++;
-                    }
-                    break;
-                case '-':
-                    if (have_code && buftail[1] == '$' && buftail[2] == '>')
-                    {
-                        script_flush_write("$>", 2, 3);
-                        buftail++; off++;
-                    }
-                    break;
-                case '$':
-                    if (have_code && buftail[1] == '>')
-                    {
-                        script_flush_write("\nprintf '%s' \'", 14, 2);
-                        buftail++; off++;
-                        have_code = false;
-                    }
-                    break;
-            }
-        }
-        script_flush;
-        if (!have_code)
-            script_write("\'\n", 2);
-        free(buffer);
         if (fclose(pipe) == EOF)
             fail(pipepath);
         if (reap_child() != 0)
