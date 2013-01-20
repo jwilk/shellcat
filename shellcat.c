@@ -135,11 +135,13 @@ void process_input(FILE *pipe, char **argv)
         }
         sputs("\' ");
     }
-    sputs("\nprintf '%s' \'");
+    sputc('\n');
+
     FILE * input = fopen(filename, "r");
     if (input == NULL)
         fail(filename);
 
+    sputs("printf '%s' \'");
     enum {
         STATE_BEGIN,
         STATE_HASH,
