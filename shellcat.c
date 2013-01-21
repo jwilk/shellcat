@@ -89,10 +89,11 @@ char * create_pipe()
 void free_pipe(char *path)
 {
     int rc;
+    char *dirpath;
     rc = unlink(path);
     if (rc != 0)
         fail("unlink");
-    char * dirpath = dirname(path);
+    dirpath = dirname(path);
     rc = rmdir(dirpath);
     if (rc != 0)
         fail("rmdir");
@@ -117,7 +118,20 @@ int reap_child()
 
 void process_input(FILE *pipe, char **argv)
 {
+    FILE *input;
     const char *filename = *argv++;
+    enum {
+        STATE_BEGIN,
+        STATE_HASH,
+        STATE_HASH_BANG,
+        STATE_TEXT,
+        STATE_TEXT_LT,
+        STATE_TEXT_LT_DOLLAR,
+        STATE_CODE,
+        STATE_CODE_DOLLAR,
+        STATE_CODE_MINUS,
+        STATE_CODE_MINUS_DOLLAR
+    } state;
 
 #define sputs(s) do { fputs(s, pipe); } while (0)
 #define sputc(c) do { fputc(c, pipe); } while (0)
@@ -137,29 +151,19 @@ void process_input(FILE *pipe, char **argv)
     }
     sputc('\n');
 
-    FILE * input = fopen(filename, "r");
+    input = fopen(filename, "r");
     if (input == NULL)
         fail(filename);
 
     sputs("printf '%s' \'");
-    enum {
-        STATE_BEGIN,
-        STATE_HASH,
-        STATE_HASH_BANG,
-        STATE_TEXT,
-        STATE_TEXT_LT,
-        STATE_TEXT_LT_DOLLAR,
-        STATE_CODE,
-        STATE_CODE_DOLLAR,
-        STATE_CODE_MINUS,
-        STATE_CODE_MINUS_DOLLAR,
-    } state = STATE_BEGIN;
+    state = STATE_BEGIN;
     while (!feof(input))
     {
         char buffer[BUFSIZ];
+        size_t size;
         const char *bufhead, *buftail;
         bufhead = buftail = buffer;
-        size_t size = fread(buffer, 1, sizeof buffer, input);
+        size = fread(buffer, 1, sizeof buffer, input);
         if (ferror(input))
             fail(filename);
 
@@ -382,6 +386,7 @@ int main(int argc, char **argv)
         show_usage();
     else
     {
+        FILE *pipe;
         pipepath = create_pipe();
         if (signal(SIGCHLD, sigchld_handler) == SIG_ERR)
             fail("signal");
@@ -393,7 +398,7 @@ int main(int argc, char **argv)
                 execlp(shell, shell, pipepath, NULL);
                 fail(shell);
         }
-        FILE * pipe = fopen(pipepath, "w");
+        pipe = fopen(pipepath, "w");
         if (pipe == NULL)
             fail(pipepath);
         if (signal(SIGCHLD, SIG_DFL) == SIG_ERR)
