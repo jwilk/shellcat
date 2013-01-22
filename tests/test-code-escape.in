@@ -1,0 +1,1 @@
+<$ yes eggs '-$>' ham | head -n1 $>
