@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e -u -C
+
+for t in "$@"
+do
+    printf '%s ... ' "$t"
+    ln -s generic-test "${t}.t"
+    echo eggs > "${t}.in"
+    echo gam > "${t}.exp"
+    printf 'ok\n'
+done
+
+# vim:ts=4 sw=4 et
