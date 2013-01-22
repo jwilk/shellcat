@@ -1,6 +1,1 @@
-#!/bin/sh
-. ./common.sh
-
-run_shellcat
-
-# vim:ft=sh ts=4 sw=4 et
+generic-test
