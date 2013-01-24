@@ -1,6 +1,6 @@
 .PHONY: all
 all: ../shellcat
-	./run-tests
+	./run-tests $(<)
 
 ../shellcat:
 	$(MAKE) -C ..

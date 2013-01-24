@@ -1,7 +1,13 @@
 #!/bin/sh
 set -e -u
 
-export shellcat=${1:-../shellcat}
+if [ -z "${*##-*}" ]
+then
+    printf 'Usage: %s <shellcat-executable> [extra-args...]\n' "$0"
+    exit 1
+fi
+
+export shellcat="$*"
 
 hr()
 {
