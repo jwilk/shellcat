@@ -316,9 +316,13 @@ void process_input(FILE *pipe, char **argv)
         case STATE_HASH:
         case STATE_HASH_BANG:
         case STATE_TEXT:
-        case STATE_TEXT_LT:
-        case STATE_TEXT_LT_DOLLAR:
             sputs("'\n");
+            break;
+        case STATE_TEXT_LT:
+            sputs("<'\n");
+            break;
+        case STATE_TEXT_LT_DOLLAR:
+            sputs("<$'\n");
             break;
         default:
             break;
