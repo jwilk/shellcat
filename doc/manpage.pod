@@ -1,0 +1,54 @@
+=encoding UTF-8
+
+=head1 NAME
+
+shellcat - templating system with shell syntax
+
+=head1 SYNOPSIS
+
+B<shellcat> [-s I<SHELL>] I<TEMPLATE> [I<ARG>...]
+
+B<shellcat> {-h | --help | -v | --version}
+
+=head1 DESCRIPTION
+
+B<I<TBD>>
+
+=head1 OPTIONS
+
+=over
+
+=item B<-s>, B<--shell>=I<SHELL>
+
+Use the specified shell. The default is F</bin/sh>.
+
+=item B<-h>, B<--help>
+
+Display help and exit.
+
+=item B<-v>, B<--version>
+
+Output version information and exit.
+
+=back
+
+=head1 TEMPLATE SYNTAX
+
+B<I<TBD>>
+
+=head1 ENVIRONMENT
+
+The following environment variables are available for the processes spawned by
+B<shellcat>:
+
+=over
+
+=item B<SHELLCAT>
+
+B<I<TBD>>
+
+=back
+
+=head1 SEE ALSO
+
+L<sh(1)>

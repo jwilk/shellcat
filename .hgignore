@@ -1,5 +1,6 @@
 syntax: glob
 
+doc/*.1
 example/*.html
 shellcat
 tests/*.err
