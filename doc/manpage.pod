@@ -34,7 +34,71 @@ Output version information and exit.
 
 =head1 TEMPLATE SYNTAX
 
-B<I<TBD>>
+=over
+
+=item I<text>
+
+Unless specified otherwise below, any text is echoed verbatim:
+
+  $ cat ex1.sc
+  Hello world!
+
+  $ shellcat ex1.sc
+  Hello world!
+
+=item B<#!>I<interpreter>
+
+If the very first line of the template starts with B<#!> characters, it is
+completely ignored. This allows for executable scripts with B<shellcat> as
+interpreter:
+
+  $ cat ex2.sc
+  #!/usr/bin/shellcat
+  Hello world!
+
+  $ chmod +x ex2.sc
+  $ ./ex2.sc
+  Hello world!
+
+=item B<E<lt>$> I<code> B<$E<gt>>
+
+The I<code> is executed by the shell:
+
+  $ cat ex3.sc
+  <$ for x in $(seq 3); do $>Hello world!
+  <$ done $>
+
+  $ shellcat ex3.sc
+  Hello world!
+  Hello world!
+  Hello world!
+
+Whitespace around I<code> is strongly recommended, but not obligatory;
+see below however.
+
+=item B<-$E<gt>>
+
+If used inside a code block, the B<$E<gt>> (with the leading minus sign
+omitted) is used in the shell code:
+
+  $ cat ex4.sc
+  <$ echo '-$> not closed yet' $>
+
+  $ shellcat ex4.sc
+  $> not closed yet
+
+=item B<E<lt>$->
+
+If used outside a code block, the B<E<lt>$> (with the trailing minus sign
+omitted) sequence is output:
+
+  $ cat ex5.sc
+  <$- not code $>
+
+  $ shellcat ex5.sc
+  <$ not code $>
+
+=back
 
 =head1 ENVIRONMENT
 
