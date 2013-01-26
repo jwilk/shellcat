@@ -109,9 +109,11 @@ B<shellcat>:
 
 =item B<SHELLCAT>
 
-B<I<TBD>>
+name of the B<shellcat> interpreter
 
 =back
+
+Variables which existed in the envionment are not modified, but left intact.
 
 =head1 SEE ALSO
 
