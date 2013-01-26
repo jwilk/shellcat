@@ -399,7 +399,7 @@ int main(int argc, char **argv)
             case -1:
                 fail("fork");
             case 0:
-                execlp(shell, shell, pipepath, NULL);
+                execlp(shell, shell, pipepath, (char*) NULL);
                 fail(shell);
         }
         pipe = fopen(pipepath, "w");
