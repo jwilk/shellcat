@@ -48,7 +48,7 @@ Unless specified otherwise below, any text is echoed verbatim:
 
 =item B<#!>I<interpreter>
 
-If the very first line of the template starts with B<#!> characters, it is
+If the first line of the template starts with B<#!> characters, it is
 completely ignored. This allows for executable scripts with B<shellcat> as
 interpreter:
 
