@@ -12,7 +12,9 @@ B<shellcat> {-h | --help | -v | --version}
 
 =head1 DESCRIPTION
 
-B<I<TBD>>
+B<shellcat> is a template processor, which uses shell script syntax. It's most
+commonly used to produce static HTML pages, though it can work with any text
+documents.
 
 =head1 OPTIONS
 
