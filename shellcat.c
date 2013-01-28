@@ -136,7 +136,7 @@ void process_input(FILE *pipe, char **argv)
 #define sputs(s) do { fputs(s, pipe); } while (0)
 #define sputc(c) do { fputc(c, pipe); } while (0)
 
-    sputs("set - ");
+    sputs("set -- ");
     for (; *argv != NULL; argv++) /* forward parameters to the script */
     {
         const char* arg = *argv;
