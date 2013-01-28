@@ -5,11 +5,18 @@ CC = gcc
 CFLAGS = -g -O2 -Wall -Wformat -Wextra -pedantic
 CPPFLAGS += -DVERSION='"$(version)"'
 
+PREFIX = /usr/local
+DESTDIR =
+
 .PHONY: all
 all: shellcat
 
 shellcat: shellcat.c
 	$(LINK.c) $(<) -o $(@)
+
+.PHONY: install
+install: shellcat
+	install -D -m755 $(<) $(DESTDIR)$(PREFIX)/bin/$(<)
             
 .PHONY: clean
 clean:
@@ -24,6 +31,12 @@ doc/shellcat.1: doc/manpage.pod
 	| pod2man --utf8 -c '' -n shellcat -r 'shellcat $(version)' \
 	> $(@).tmp
 	mv $(@).tmp $(@)
+
+install: install-doc
+
+.PHONY: install-doc
+install-doc: doc/shellcat.1
+	install -D -m644 $(<) $(DESTDIR)$(PREFIX)/share/man/man1/$(notdir $(<))
 
 clean: clean-doc
 
