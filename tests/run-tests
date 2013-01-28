@@ -7,7 +7,12 @@ then
     exit 1
 fi
 
+ifs=$IFS
+IFS='
+'
 export shellcat="$*"
+export shellcat_ifs="$IFS"
+IFS=$ifs
 
 hr()
 {
