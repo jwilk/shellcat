@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 
+#include <ctype.h>
 #include <errno.h>
 #include <getopt.h>
 #include <libgen.h>
@@ -339,6 +340,55 @@ void process_input(FILE *pipe, char **argv)
 
 }
 
+bool is_shell_simple(const char *s)
+{
+    for (; *s; s++) {
+        switch (*s)
+        {
+            case '/':
+            case '_':
+            case '-':
+                continue;
+        }
+        if (isalnum(*s))
+            continue;
+        return false;
+    }
+    return true;
+}
+
+const char * build_commandline(const char *shell, const char *arg)
+{
+    static char buffer[4096]; /* _POSIX_ARG_MAX */
+    const char *argptr;
+    size_t size = snprintf(buffer, sizeof buffer, "%s '", shell);
+    if (size + 2 >= sizeof buffer)
+    {
+        errno = E2BIG;
+        fail("command-line");
+    }
+    for (argptr = arg; *argptr; argptr++)
+    {
+        if (size + 6 >= sizeof buffer)
+        {
+            errno = E2BIG;
+            fail("command-line");
+        }
+        if (*argptr == '\'')
+        {
+            strcpy(buffer + size, "'\\''");
+            size += 4;
+        }
+        else
+        {
+            buffer[size] = *argptr;
+            size += 1;
+        }
+    }
+    strcpy(buffer + size, "'");
+    return buffer;
+}
+
 int main(int argc, char **argv)
 {
     int rc = EXIT_SUCCESS;
@@ -399,7 +449,13 @@ int main(int argc, char **argv)
             case -1:
                 fail("fork");
             case 0:
-                execlp(shell, shell, pipepath, (char*) NULL);
+                if (is_shell_simple(shell))
+                    execlp(shell, shell, pipepath, (char*) NULL);
+                else
+                {
+                    const char * commandline = build_commandline(shell, pipepath);
+                    execlp("sh", "sh", "-c", commandline, (char *) NULL);
+                }
                 fail(shell);
         }
         pipe = fopen(pipepath, "w");
