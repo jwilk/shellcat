@@ -1,7 +1,17 @@
 shellcat 1.0 (not released yet)
 -------------------------------
-* Standard input is not blocked any more.
-* Major code cleanup.
+* Remove Debian packaging.
+* Rename the binary as “shellcat”.
+* Change the license to the Expat license.
+* Improve error handling.
+* Use named pipes for communication with the shell, instead of using standard
+  input for this purpose.
+* Read input in chunks, instead of loading whole files into memory.
+* Don't ignore unknown options.
+* Provide SHELLCAT environment variable to the subprocesses.
+* Add documentation and examples.
+* Add a test suite.
+* Add a vim syntax file.
 
 shellcat 0.0.6 (released on 2004-08-24)
 ---------------------------------------
