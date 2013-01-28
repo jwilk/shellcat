@@ -1,4 +1,4 @@
-<$ if [ $1 = title ]; then $>Suscipit facilisi<$ exit; fi $>
+<$ if [ "$1" = title ]; then $>Suscipit facilisi<$ exit; fi $>
 <strong>Suscipit facilisi</strong> feugiat ullamcorper nisl, ex aliquip, sit
 blandit consequat. Ad quis et minim laoreet. Consequat dolore ut dolore duis
 ipsum vero dolore amet vel praesent consectetuer enim illum. Nulla, dolore eros

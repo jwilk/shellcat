@@ -1,4 +1,4 @@
-<$ if [ $1 = title ]; then $>Volutpat lobortis<$ exit; fi $>
+<$ if [ "$1" = title ]; then $>Volutpat lobortis<$ exit; fi $>
 <strong>Volutpat lobortis</strong> nisl diam quis consequat iusto eum. Nonummy
 te quis illum nisl molestie et in euismod molestie zzril ipsum dignissim
 volutpat. Commodo nulla wisi iusto suscipit et in duis ullamcorper at sed
