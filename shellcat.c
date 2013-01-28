@@ -121,7 +121,8 @@ void process_input(FILE *pipe, char **argv)
 {
     FILE *input;
     const char *filename = *argv++;
-    enum {
+    enum
+    {
         STATE_BEGIN,
         STATE_HASH,
         STATE_HASH_BANG,
@@ -342,7 +343,8 @@ void process_input(FILE *pipe, char **argv)
 
 bool is_shell_simple(const char *s)
 {
-    for (; *s; s++) {
+    for (; *s; s++)
+    {
         switch (*s)
         {
             case '/':
