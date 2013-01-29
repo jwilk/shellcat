@@ -1,4 +1,4 @@
-version = $(shell head -n1 doc/changelog | cut -d ' ' -f2)
+version = $(shell head -n1 doc/changelog | cut -d ' ' -f2 | tr -d '()')
 pod2man = $(shell which pod2man)
 
 CC = gcc
