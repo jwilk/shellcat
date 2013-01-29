@@ -1,54 +1,67 @@
-shellcat 1.0 (not released yet)
--------------------------------
-* Remove Debian packaging.
-* Rename the binary as “shellcat”.
-* Change the license to the Expat license.
-* Improve error handling.
-* Use named pipes for communication with the shell, instead of using standard
-  input for this purpose.
-* Read input in chunks, instead of loading whole files into memory.
-* Don't ignore unknown options.
-* Provide SHELLCAT environment variable to the subprocesses.
-* Add documentation and examples.
-* Add a test suite.
-* Add a vim syntax file.
+shellcat (1.0) UNRELEASED; urgency=low
 
-shellcat 0.0.6 (released on 2004-08-24)
----------------------------------------
-* Fix incorrect handling of files that don't end with ``\n`` or another special
-  character.
-* Fix issues with backslashes, backticks and chars ``\000`` … ``\037``,
-  ``\177`` … ``\377``.
-* Add support for busybox shell. Thanks to Simon Poole.
-* The program now with busybox, ash, dash, bash, ksh, zsh.
-* Add support for TinyCC (try ``make TCC=1``).
+  * Remove Debian packaging.
+  * Rename the binary as “shellcat”.
+  * Change the license to the Expat license.
+  * Improve error handling.
+  * Use named pipes for communication with the shell, instead of using
+    standard input for this purpose.
+  * Read input in chunks, instead of loading whole files into memory.
+  * Don't ignore unknown options.
+  * Provide SHELLCAT environment variable to the subprocesses.
+  * Add documentation and examples.
+  * Add a test suite.
+  * Add a vim syntax file.
 
-shellcat 0.05 (release on 2004-08-10)
--------------------------------------
-* Ignore shebang in the first line.
-  Thanks to Simon Poole.
-* The code is now conforming to C99.
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 29 Jan 2013 13:06:20 +0100
 
-shellcat 0.04 (released on 2004-01-02)
---------------------------------------
-* Code cleanup.
-* Remove automake and autoconf junk.
-* Remove national language support.
-* Fix minor bugs.
-* Add the ``Makefile``.
+shellcat (0.06) unstable; urgency=low
 
-shellcat 0.03 (released on 2002-12-13)
---------------------------------------
-* Use automake and autoconf.
+  * Fix incorrect handling of files that don't end with newline or another
+    special character.
+  * Fix issues with backslashes, backticks, control characters, and non-ASCII
+    characters.
+  * Add support for busybox shell.
+    Thanks to Simon Poole.
+  * The program now with busybox, ash, dash, bash, ksh, zsh.
+  * Add support for TinyCC (try ‘make TCC=1’).
 
-shellcat 0.02 (released on 2001-08-30)
---------------------------------------
-* Improve error handling.
-* Fix minor bugs.
-* The ``<$-`` and ``-$>`` sequences are now special.
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 24 Aug 2004 19:21:19 +0200
 
-shellcat 0.01 (released on 2001-08-23)
---------------------------------------
-* Initial release.
+shellcat (0.05) unstable; urgency=low
 
-.. vim:tw=76 et ft=rst
+  * Ignore shebang in the first line.
+    Thanks to Simon Poole.
+  * The code is now conforming to C99.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 10 Aug 2004 15:33:53 +0200
+
+shellcat (0.04) unstable; urgency=low
+
+  * Code cleanup.
+  * Remove automake and autoconf cruft.
+  * Remove national language support.
+  * Fix minor bugs.
+  * Add the Makefile.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 02 Jan 2004 11:32:57 +0100
+
+shellcat (0.03) unstable; urgency=low
+
+  * Use automake and autoconf.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 13 Dec 2002 14:44:13 +0100
+
+shellcat (0.02) unstable; urgency=low
+
+  * Improve error handling.
+  * Fix minor bugs.
+  * The ‘<$-’ and ‘-$>’ sequences are now special.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 30 Aug 2001 14:02:00 +0200
+
+shellcat (0.01) unstable; urgency=low
+
+  * Initial release.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 23 Aug 2001 20:41:03 +0200
