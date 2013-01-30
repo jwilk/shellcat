@@ -12,9 +12,9 @@ B<shellcat> {-h | --help | -v | --version}
 
 =head1 DESCRIPTION
 
-B<shellcat> is a template processor, which uses shell script syntax. It's most
-commonly used to produce static HTML pages, though it can work with any text
-documents.
+B<shellcat> is a template processor, which uses shell script syntax.
+It can be used to produce static HTML pages, or pre-process any sort of text
+document.
 
 =head1 OPTIONS
 
