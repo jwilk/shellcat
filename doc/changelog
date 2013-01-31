@@ -6,6 +6,10 @@ shellcat (1.0) UNRELEASED; urgency=low
   * Read input in chunks, instead of loading whole files into memory.
   * Provide SHELLCAT environment variable to the subprocesses.
   * Improve error handling.
+  * Improve the makefile:
+    - Remove compiler-specific hacks. One can now use a different compiler by
+      overriding the CC variable.
+    - Provide the ‘install’ target.
   * Don't ignore unknown options.
   * Change the license to the Expat license.
   * Remove Debian packaging.
@@ -13,7 +17,7 @@ shellcat (1.0) UNRELEASED; urgency=low
   * Add a test suite.
   * Add a vim syntax file.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 29 Jan 2013 13:06:20 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 31 Jan 2013 12:21:35 +0100
 
 shellcat (0.06) unstable; urgency=low
 
