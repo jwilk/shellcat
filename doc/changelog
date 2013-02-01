@@ -1,4 +1,4 @@
-shellcat (1.0) UNRELEASED; urgency=low
+shellcat (1.0) unstable; urgency=low
 
   * Rename the binary as “shellcat”.
   * Use named pipes for communication with the shell, instead of using
@@ -17,7 +17,7 @@ shellcat (1.0) UNRELEASED; urgency=low
   * Add a test suite.
   * Add a vim syntax file.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 31 Jan 2013 12:21:35 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 01 Feb 2013 07:15:46 +0100
 
 shellcat (0.06) unstable; urgency=low
 
