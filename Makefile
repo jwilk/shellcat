@@ -28,7 +28,7 @@ all: doc/shellcat.1
 
 doc/shellcat.1: doc/manpage.pod
 	sed -e 's/L<\([a-z_-]\+\)(\([0-9]\+\))>/B<\1>(\2)/' $(<) \
-	| pod2man --utf8 -c '' -n shellcat -r 'shellcat $(version)' \
+	| pod2man --utf8 -c '' -n SHELLCAT -r 'shellcat $(version)' \
 	> $(@).tmp
 	mv $(@).tmp $(@)
 
