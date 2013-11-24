@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 
+#include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <getopt.h>
@@ -77,6 +78,7 @@ char * create_pipe()
     path = malloc(strlen(tmpdir) + 22);
     if (path == NULL)
         fail("malloc");
+    assert(path != NULL);
     sprintf(path, "%s/shellcat.XXXXXX", tmpdir);
     if (mkdtemp(path) == NULL)
         fail("mkdtemp");
