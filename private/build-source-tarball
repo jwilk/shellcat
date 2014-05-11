@@ -1,6 +1,6 @@
 #!/bin/sh
 name=shellcat
-url=http://bitbucket.org/jwilk/shellcat
+url=https://bitbucket.org/jwilk/shellcat
 if [ $# -ne 1 ]
 then
     printf "%s <version>\n" "$0" >&2
