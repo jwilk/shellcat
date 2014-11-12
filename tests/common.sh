@@ -14,7 +14,7 @@ run_shellcat()
     set -- $shellcat "$f_input" "$@"
     IFS="$ifs"
     "$@" > "$f_output"
-    exec diff -u "$f_expected" "$f_output" 
+    exec diff -u "$f_expected" "$f_output"
 }
 
 # vim:ts=4 sw=4 et
