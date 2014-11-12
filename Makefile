@@ -17,7 +17,7 @@ shellcat: shellcat.c
 .PHONY: install
 install: shellcat
 	install -D -m755 $(<) $(DESTDIR)$(PREFIX)/bin/$(<)
-            
+
 .PHONY: clean
 clean:
 	rm -f shellcat
