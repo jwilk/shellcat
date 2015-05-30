@@ -1,7 +1,7 @@
 version = $(shell head -n1 doc/changelog | cut -d ' ' -f2 | tr -d '()')
 pod2man = $(shell which pod2man)
 
-CC = gcc
+CC ?= gcc
 CFLAGS = -g -O2 -Wall -Wformat -Wextra -pedantic
 CPPFLAGS += -DVERSION='"$(version)"'
 
