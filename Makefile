@@ -2,7 +2,8 @@ version = $(shell head -n1 doc/changelog | cut -d ' ' -f2 | tr -d '()')
 pod2man = $(shell which pod2man)
 
 CC ?= gcc
-CFLAGS = -g -O2 -Wall -Wformat -Wextra -pedantic
+CFLAGS ?= -g -O2
+CFLAGS += -Wall -Wformat -Wextra -pedantic
 CPPFLAGS += -DVERSION='"$(version)"'
 
 PREFIX = /usr/local
