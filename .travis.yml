@@ -1,7 +1,9 @@
 language: c
 compiler:
- - clang
- - gcc
+- clang
+- gcc
 script:
- - make
- - make -C tests
+- make
+- make -C tests
+
+# vim:ts=2 sts=2 sw=2 et
