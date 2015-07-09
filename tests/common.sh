@@ -17,4 +17,4 @@ run_shellcat()
     exec diff -u "$f_expected" "$f_output"
 }
 
-# vim:ts=4 sw=4 et
+# vim:ts=4 sts=4 sw=4 et
