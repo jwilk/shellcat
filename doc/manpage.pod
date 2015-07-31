@@ -115,7 +115,7 @@ name of the B<shellcat> interpreter
 
 =back
 
-Variables which existed in the envionment are not modified, but left intact.
+Variables which existed in the environment are not modified, but left intact.
 
 =head1 SEE ALSO
 
