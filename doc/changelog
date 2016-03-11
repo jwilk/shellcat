@@ -1,10 +1,11 @@
 shellcat (1.0.1) UNRELEASED; urgency=low
 
+  * Make the build system honor the CC and CFLAGS environment variables.
   * Make the manual page title all uppercase, as per man-pages(7)
     recommendation.
   * Clarify some wording in the manual page.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Sat, 12 Mar 2016 00:03:05 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Sat, 12 Mar 2016 00:04:32 +0100
 
 shellcat (1.0) unstable; urgency=low
 
