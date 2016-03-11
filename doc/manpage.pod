@@ -80,8 +80,8 @@ see below however.
 
 =item B<-$E<gt>>
 
-If used inside a code block, the B<$E<gt>> (with the leading minus sign
-omitted) is used in the shell code:
+If used inside a code block, the B<$E<gt>> sequence
+(with the leading minus sign omitted) is used in the shell code:
 
   $ cat ex4.sc
   <$ echo '-$> not closed yet' $>
@@ -91,8 +91,8 @@ omitted) is used in the shell code:
 
 =item B<E<lt>$->
 
-If used outside a code block, the B<E<lt>$> (with the trailing minus sign
-omitted) sequence is output:
+If used outside a code block, the B<E<lt>$> sequence
+(with the trailing minus sign omitted) is output:
 
   $ cat ex5.sc
   <$- not code $>
