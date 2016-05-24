@@ -1,5 +1,6 @@
 doc/*.1
 example/*.html
+secret
 shellcat
 tests/*.err
 tests/*.out
