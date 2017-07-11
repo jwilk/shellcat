@@ -451,6 +451,7 @@ int main(int argc, char **argv)
         {
             case -1:
                 fail("fork");
+                break;
             case 0:
                 if (is_shell_simple(shell))
                     execlp(shell, shell, pipepath, (char*) NULL);
