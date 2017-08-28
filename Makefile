@@ -17,7 +17,8 @@ shellcat: shellcat.c
 
 .PHONY: install
 install: shellcat
-	install -D -m755 $(<) $(DESTDIR)$(PREFIX)/bin/$(<)
+	install -d $(DESTDIR)$(PREFIX)/bin
+	install -m755 $(<) $(DESTDIR)$(PREFIX)/bin/$(<)
 
 .PHONY: clean
 clean:
@@ -37,7 +38,8 @@ install: install-doc
 
 .PHONY: install-doc
 install-doc: doc/shellcat.1
-	install -D -m644 $(<) $(DESTDIR)$(PREFIX)/share/man/man1/$(notdir $(<))
+	install -d $(DESTDIR)$(PREFIX)/share/man/man1
+	install -m644 $(<) $(DESTDIR)$(PREFIX)/share/man/man1/$(notdir $(<))
 
 clean: clean-doc
 
