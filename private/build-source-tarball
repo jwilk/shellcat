@@ -46,11 +46,11 @@ export TAR_OPTIONS='--owner root --group root --mode a+rX --format ustar'
 export GZIP='-9 -n'
 git archive "$commit" --prefix="$name-$version/" | tar -C "$sourceroot" -xf -
 cd "$sourceroot"/*
-make doc/shellcat.1
 rm .git*
 rm .travis.yml
 rm private/build-source-tarball
 mv LICENSE doc/
+make -C doc/
 find . -empty -delete
 cd ..
 tar -czf "$pwd/$name-$version.tar.gz" */
