@@ -3,9 +3,10 @@ shellcat (1.0.2) UNRELEASED; urgency=low
   * Fix GCC 7 warnings.
   * Improve the build system:
     + Fix compatibility with non-GNU install(1) programs.
+    + Move manpage building code to a separate makefile.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 28 Aug 2017 20:43:08 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 29 Aug 2017 13:36:06 +0200
 
 shellcat (1.0.1) unstable; urgency=low
 
