@@ -1,12 +1,17 @@
 shellcat (1.1) UNRELEASED; urgency=low
 
+  * Make --version print to stdout, not stderr.
+  * Make --help print to stdout, not stderr.
   * Fix GCC 7 warnings.
   * Improve the build system:
     + Fix compatibility with non-GNU install(1) programs.
     + Move manpage building code to a separate makefile.
+    + Add “test” and “check” targets to the main makefile.
+    + Make the “clean” target in the main makefile also clean the “tests”
+      subdirectory.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 31 Aug 2017 12:27:06 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 31 Aug 2017 12:39:47 +0200
 
 shellcat (1.0.1) unstable; urgency=low
 
