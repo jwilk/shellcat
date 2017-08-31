@@ -45,6 +45,10 @@ else
 	install -m644 doc/shellcat.1 $(DESTDIR)$(PREFIX)/share/man/man1/shellcat.1
 endif
 
+.PHONY: test check
+test check: shellcat
+	$(MAKE) -C tests
+
 .PHONY: clean
 clean:
 	rm -f shellcat
