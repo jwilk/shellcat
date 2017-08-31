@@ -1,4 +1,4 @@
-shellcat (1.1) UNRELEASED; urgency=low
+shellcat (1.1) unstable; urgency=low
 
   * Make --version print to stdout, not stderr.
   * Make --help print to stdout, not stderr.
@@ -11,7 +11,7 @@ shellcat (1.1) UNRELEASED; urgency=low
       subdirectory.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Thu, 31 Aug 2017 12:39:47 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 31 Aug 2017 13:31:36 +0200
 
 shellcat (1.0.1) unstable; urgency=low
 
