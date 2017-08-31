@@ -64,7 +64,7 @@ static void show_usage()
 
 static void show_version(void)
 {
-    fprintf(stderr, "shellcat " VERSION "\n");
+    printf("shellcat " VERSION "\n");
 }
 
 char * create_pipe()
