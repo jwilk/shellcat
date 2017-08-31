@@ -52,5 +52,6 @@ test check: shellcat
 .PHONY: clean
 clean:
 	rm -f shellcat
+	$(MAKE) -C tests clean
 
 # vim:ts=4 sts=4 sw=4 noet
