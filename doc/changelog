@@ -1,4 +1,4 @@
-shellcat (1.0.2) UNRELEASED; urgency=low
+shellcat (1.1) UNRELEASED; urgency=low
 
   * Fix GCC 7 warnings.
   * Improve the build system:
@@ -6,7 +6,7 @@ shellcat (1.0.2) UNRELEASED; urgency=low
     + Move manpage building code to a separate makefile.
   * Improve the test suite.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Tue, 29 Aug 2017 13:36:06 +0200
+ -- Jakub Wilk <jwilk@jwilk.net>  Thu, 31 Aug 2017 12:27:06 +0200
 
 shellcat (1.0.1) unstable; urgency=low
 
