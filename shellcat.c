@@ -52,7 +52,7 @@ static void fail(const char *s)
 
 static void show_usage()
 {
-    fprintf(stderr,
+    printf(
         "Usage: %s [options] <file> [argument...]\n\n"
         "Options:\n"
         "  -s, --shell=SHELL   change the default shell to SHELL\n"
