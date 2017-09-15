@@ -23,7 +23,10 @@ version = $(shell head -n1 doc/changelog | cut -d ' ' -f2 | tr -d '()')
 CC ?= gcc
 CFLAGS ?= -g -O2
 CFLAGS += -Wall -Wformat -Wextra -pedantic
+CFLAGS += $(shell getconf LFS_CFLAGS)
 CPPFLAGS += -DVERSION='"$(version)"'
+LDFLAGS += $(shell getconf LFS_LDFLAGS)
+LDLIBS += $(shell getconf LFS_LIBS)
 
 PREFIX = /usr/local
 DESTDIR =
