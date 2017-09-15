@@ -32,7 +32,6 @@ DESTDIR =
 all: shellcat
 
 shellcat: shellcat.c
-	$(LINK.c) $(<) -o $(@)
 
 .PHONY: install
 install: shellcat
