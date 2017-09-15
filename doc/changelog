@@ -1,3 +1,11 @@
+shellcat (1.1.1) UNRELEASED; urgency=low
+
+  * Improve the build system:
+    + Honour the LDLIBS variable from environment.
+    + Enable LFS build flags.
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Fri, 15 Sep 2017 23:02:29 +0200
+
 shellcat (1.1) unstable; urgency=low
 
   * Make --version print to stdout, not stderr.
