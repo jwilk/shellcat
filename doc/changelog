@@ -59,7 +59,7 @@ shellcat (0.06) unstable; urgency=low
     characters.
   * Add support for busybox shell.
     Thanks to Simon Poole.
-  * The program now with busybox, ash, dash, bash, ksh, zsh.
+  * The program now works with busybox, ash, dash, bash, ksh, zsh.
   * Add support for TinyCC (try “make TCC=1”).
 
  -- Jakub Wilk <jwilk@jwilk.net>  Tue, 24 Aug 2004 19:21:19 +0200
