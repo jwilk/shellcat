@@ -53,7 +53,7 @@ static void fail(const char *s)
 static void show_usage()
 {
     printf(
-        "Usage: %s [options] <file> [argument...]\n\n"
+        "Usage: %s [options] FILE [ARGUMENT...]\n\n"
         "Options:\n"
         "  -s, --shell=SHELL   change the default shell to SHELL\n"
         "  -h, --help          display this help and exit\n"
