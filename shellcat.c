@@ -50,9 +50,9 @@ static void fail(const char *s)
     exit(EXIT_FAILURE);
 }
 
-static void show_usage()
+static void show_usage(FILE *fp)
 {
-    printf(
+    fprintf(fp,
         "Usage: %s [options] FILE [ARGUMENT...]\n\n"
         "Options:\n"
         "  -s, --shell=SHELL   change the default shell to SHELL\n"
@@ -439,8 +439,12 @@ int main(int argc, char **argv)
 
     if (opt_version)
         show_version();
-    else if (opt_help || optind >= argc)
-        show_usage();
+    else if (opt_help)
+        show_usage(stdout);
+    else if (optind >= argc) {
+        show_usage(stderr);
+        exit(1);
+    }
     else
     {
         FILE *pipe;
