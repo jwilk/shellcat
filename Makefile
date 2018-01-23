@@ -38,11 +38,11 @@ shellcat: shellcat.c
 install: shellcat
 	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m755 $(<) $(DESTDIR)$(PREFIX)/bin/$(<)
-ifeq "$(wildcard .git doc/shellcat.1)" ".git"
+ifeq "$(wildcard .git doc/*.1)" ".git"
 	# run "$(MAKE) -C doc" to build the manpage
 else
 	install -d $(DESTDIR)$(PREFIX)/share/man/man1
-	install -m644 doc/shellcat.1 $(DESTDIR)$(PREFIX)/share/man/man1/shellcat.1
+	install -m644 doc/$(<).1 $(DESTDIR)$(PREFIX)/share/man/man1/$(<).1
 endif
 
 .PHONY: test check
