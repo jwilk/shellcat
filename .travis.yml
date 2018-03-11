@@ -9,6 +9,7 @@ script:
 - make check
 - make -C doc
 - make install PREFIX=~/.local
+- cd /
 - shellcat --help
 - export MANPATH=~/.local/share/man MANWIDTH=80
 - man 1 shellcat | grep -A 10 -w SHELLCAT
