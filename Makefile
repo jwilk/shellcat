@@ -38,7 +38,7 @@ shellcat: shellcat.c
 install: shellcat
 	install -d $(DESTDIR)$(PREFIX)/bin
 	install -m755 $(<) $(DESTDIR)$(PREFIX)/bin/$(<)
-ifeq "$(wildcard .git doc/*.1)" ".git"
+ifeq "$(wildcard doc/*.1)" ""
 	# run "$(MAKE) -C doc" to build the manpage
 else
 	install -d $(DESTDIR)$(PREFIX)/share/man/man1
