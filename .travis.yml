@@ -4,7 +4,12 @@ language: c
 compiler:
 - clang
 - gcc
+addons:
+  apt:
+    packages:
+    - cppcheck
 script:
+- cppcheck --error-exitcode=1 *.c
 - make
 - make check
 - make -C doc
