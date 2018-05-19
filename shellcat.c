@@ -88,7 +88,7 @@ char * create_pipe()
     return path;
 }
 
-void free_pipe(char *path)
+void rm_pipe(char *path)
 {
     int rc;
     char *dirpath;
@@ -99,6 +99,11 @@ void free_pipe(char *path)
     rc = rmdir(dirpath);
     if (rc != 0)
         fail("rmdir");
+}
+
+void free_pipe(char *path)
+{
+    rm_pipe(path);
     free(path);
 }
 
@@ -106,7 +111,7 @@ void sigchld_handler(int signal)
 {
     (void) signal; /* unused */
     if (pipepath != NULL)
-        free_pipe(pipepath);
+        rm_pipe(pipepath);
     _exit(EXIT_FAILURE);
 }
 
