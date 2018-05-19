@@ -5,3 +5,4 @@
 /tests/*.err
 /tests/*.out
 /tests/*.tmp
+/tests/*.report

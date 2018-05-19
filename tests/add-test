@@ -6,7 +6,7 @@ do
     printf '%s ... ' "$t"
     ln -s generic-test "${t}.t"
     echo eggs > "${t}.in"
-    echo ham > "${t}.exp"
+    echo ham > "${t}.xout"
     printf 'ok\n'
 done
 

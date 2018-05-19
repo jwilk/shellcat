@@ -25,10 +25,10 @@ for file in test-*.t
 do
     test="${file%.t}"
     printf '%s ... ' "$test"
-    rm -f "${test}.err"
-    if ( "./$file" 2>&1 ) > "${test}.err"
+    rm -f "${test}.report"
+    if ( "./$file" 2>&1 ) > "${test}.report"
     then
-        rm -f "${test}.err"
+        rm -f "${test}.report"
         printf 'ok\n'
         n_ok=$(($n_ok + 1))
     else
@@ -42,11 +42,11 @@ printf '\n'
 for file in test-*.t
 do
     test="${file%.t}"
-    [ -e "${test}.err" ] || continue
+    [ -e "${test}.report" ] || continue
     hr '='
     printf 'FAILED: %s\n' "$test"
     hr '-'
-    cat "${test}.err"
+    cat "${test}.report"
     hr '='
     printf '\n'
 done
