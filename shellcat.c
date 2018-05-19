@@ -91,12 +91,16 @@ static char * create_pipe()
 static void rm_pipe(char *path)
 {
     int rc;
-    char *dirpath;
+    char *sep;
     rc = unlink(path);
     if (rc != 0)
         fail("unlink");
-    dirpath = dirname(path);
-    rc = rmdir(dirpath);
+    sep = strrchr(path, '/');
+    assert(sep != NULL);
+    assert(sep > path);
+    *sep = '\0';
+    rc = rmdir(path);
+    *path = '\0';
     if (rc != 0)
         fail("rmdir");
 }
