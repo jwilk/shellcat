@@ -420,9 +420,15 @@ int main(int argc, char **argv)
     bool opt_version = false;
     bool opt_help = false;
 
-    progname = argv[0];
-    if (setenv("SHELLCAT", progname, false) != 0)
+    if (setenv("SHELLCAT", argv[0], false) != 0)
         fail("setenv");
+    {
+        const char *p = strrchr(argv[0], '/');
+        if (p)
+            progname = p + 1;
+        else
+            progname = argv[0];
+    }
 
     while (true)
     {
