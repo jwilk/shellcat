@@ -57,6 +57,7 @@ static void afail(const char *s)
         write(STDERR_FILENO, progname, strlen(progname)) &&
         write(STDERR_FILENO, ": ", 2) &&
         write(STDERR_FILENO, s, strlen(s)) &&
+        (errno == 0 || write(STDERR_FILENO, ": unknown error", 15)) &&
         write(STDERR_FILENO, "\n", 1)
     );
     _exit(EXIT_FAILURE);
@@ -100,7 +101,7 @@ static char * create_pipe()
     return path;
 }
 
-static void rm_pipe(char *path)
+static void rm_pipe(char *path, void (fail)(const char *))
 {
     int rc;
     char *sep;
@@ -119,7 +120,7 @@ static void rm_pipe(char *path)
 
 static void free_pipe(char *path)
 {
-    rm_pipe(path);
+    rm_pipe(path, fail);
     free(path);
 }
 
@@ -127,7 +128,8 @@ static void sigchld_handler(int signal)
 {
     (void) signal; /* unused */
     if (pipepath != NULL)
-        rm_pipe(pipepath);
+        rm_pipe(pipepath, afail);
+    errno = 0;
     afail("shell terminated prematurely");
 }
 
