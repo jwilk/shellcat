@@ -67,7 +67,7 @@ static void show_version(void)
     printf("shellcat " VERSION "\n");
 }
 
-char * create_pipe()
+static char * create_pipe()
 {
     int rc;
     char *path;
@@ -88,7 +88,7 @@ char * create_pipe()
     return path;
 }
 
-void rm_pipe(char *path)
+static void rm_pipe(char *path)
 {
     int rc;
     char *dirpath;
@@ -101,13 +101,13 @@ void rm_pipe(char *path)
         fail("rmdir");
 }
 
-void free_pipe(char *path)
+static void free_pipe(char *path)
 {
     rm_pipe(path);
     free(path);
 }
 
-void sigchld_handler(int signal)
+static void sigchld_handler(int signal)
 {
     (void) signal; /* unused */
     if (pipepath != NULL)
@@ -115,7 +115,7 @@ void sigchld_handler(int signal)
     _exit(EXIT_FAILURE);
 }
 
-int reap_child()
+static int reap_child()
 {
     int rc;
     if (wait(&rc) == -1)
@@ -123,7 +123,7 @@ int reap_child()
     return rc;
 }
 
-void process_input(FILE *pipe, char **argv)
+static void process_input(FILE *pipe, char **argv)
 {
     FILE *input;
     const char *filename = *argv++;
@@ -347,7 +347,7 @@ void process_input(FILE *pipe, char **argv)
 
 }
 
-bool is_shell_simple(const char *s)
+static bool is_shell_simple(const char *s)
 {
     for (; *s; s++)
     {
@@ -365,7 +365,7 @@ bool is_shell_simple(const char *s)
     return true;
 }
 
-const char * build_commandline(const char *shell, const char *arg)
+static const char * build_commandline(const char *shell, const char *arg)
 {
     static char buffer[4096]; /* _POSIX_ARG_MAX */
     const char *argptr;
