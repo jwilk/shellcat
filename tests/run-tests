@@ -37,7 +37,8 @@ IFS=$ifs
 
 hr()
 {
-    printf '%s\n' $(yes "$1" | head -n 60 | tr -d '\n')
+    printf '%60s' | tr ' ' "$1"
+    printf '\n'
 }
 
 n_ok=0
