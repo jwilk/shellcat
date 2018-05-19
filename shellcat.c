@@ -50,6 +50,18 @@ static void fail(const char *s)
     exit(EXIT_FAILURE);
 }
 
+static void afail(const char *s)
+/* async-signal-safe version of fail() */
+{
+    (void) (
+        write(STDERR_FILENO, progname, strlen(progname)) &&
+        write(STDERR_FILENO, ": ", 2) &&
+        write(STDERR_FILENO, s, strlen(s)) &&
+        write(STDERR_FILENO, "\n", 1)
+    );
+    _exit(EXIT_FAILURE);
+}
+
 static void show_usage(FILE *fp)
 {
     fprintf(fp,
@@ -116,7 +128,7 @@ static void sigchld_handler(int signal)
     (void) signal; /* unused */
     if (pipepath != NULL)
         rm_pipe(pipepath);
-    _exit(EXIT_FAILURE);
+    afail("shell terminated prematurely");
 }
 
 static int reap_child()
