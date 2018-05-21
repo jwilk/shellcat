@@ -1,0 +1,2 @@
+/example/*.sc linguist-language=HTML
+/tests/*.t linguist-language=Shell
