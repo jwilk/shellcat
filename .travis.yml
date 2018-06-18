@@ -14,6 +14,7 @@ script:
 - make
 - make check
 - make -C doc
+- make -C doc check
 - make install PREFIX=~/.local
 - cd /
 - shellcat --help
