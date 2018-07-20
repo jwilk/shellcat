@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-version = $(shell head -n1 changelog | cut -d ' ' -f2 | tr -d '()')
+version = $(shell IFS='()' read _ v _ < changelog && echo $$v)
 
 .PHONY: all
 all: shellcat.1

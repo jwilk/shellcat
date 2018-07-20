@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-version = $(shell head -n1 doc/changelog | cut -d ' ' -f2 | tr -d '()')
+version = $(shell IFS='()' read _ v _ < doc/changelog && echo $$v)
 
 CC ?= gcc
 CFLAGS ?= -g -O2
