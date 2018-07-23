@@ -16,4 +16,6 @@ all: $(pages)
 clean:
 	rm -f *.html *.tmp
 
+.error = GNU make is required
+
 # vim:ts=4 sts=4 sw=4 noet
