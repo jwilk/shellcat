@@ -20,7 +20,7 @@
 
 sources = $(wildcard [a-z]*.sc)
 pages = $(sources:.sc=.html)
-shellcat = $(shell which shell || echo ../shellcat)
+shellcat = $(shell which shellcat || echo ../shellcat)
 
 .PHONY: all
 all: $(pages)
