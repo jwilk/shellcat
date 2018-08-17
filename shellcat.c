@@ -41,8 +41,8 @@
 
 static const char *progname = "shellcat";
 
-char * pipepath = NULL; /* this needs to be global, so that we can remove
-                           the pipe in the SIGCHLD handler */
+static char * pipepath = NULL; /* this needs to be global, so that we can
+                                  remove the pipe in the SIGCHLD handler */
 
 static void fail(const char *s)
 {
