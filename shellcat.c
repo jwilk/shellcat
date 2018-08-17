@@ -387,7 +387,10 @@ static const char * build_commandline(const char *shell, const char *arg)
 {
     static char buffer[4096]; /* _POSIX_ARG_MAX */
     const char *argptr;
-    size_t size = snprintf(buffer, sizeof buffer, "%s '", shell);
+    int isize = snprintf(buffer, sizeof buffer, "%s '", shell);
+    if (isize < 0)
+        fail("command-line");
+    size_t size = (size_t) isize;
     if (size + 2 >= sizeof buffer)
     {
         errno = E2BIG;
