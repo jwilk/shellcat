@@ -26,11 +26,11 @@ Use the specified shell. The default is F</bin/sh>.
 
 =item B<-h>, B<--help>
 
-Display help and exit.
+Show help message and exit.
 
 =item B<-v>, B<--version>
 
-Output version information and exit.
+Show version information and exit.
 
 =back
 

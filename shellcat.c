@@ -69,8 +69,8 @@ static void show_usage(FILE *fp)
         "Usage: %s [options] FILE [ARGUMENT...]\n\n"
         "Options:\n"
         "  -s, --shell=SHELL   change the default shell to SHELL\n"
-        "  -h, --help          display this help and exit\n"
-        "  -v, --version       output version information and exit\n\n",
+        "  -h, --help          show this help message and exit\n"
+        "  -v, --version       show version information and exit\n\n",
         progname
     );
 }
