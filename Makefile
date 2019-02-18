@@ -29,6 +29,9 @@ CPPFLAGS += -DVERSION='"$(version)"'
 PREFIX = /usr/local
 DESTDIR =
 
+bindir = $(PREFIX)/bin
+mandir = $(PREFIX)/share/man
+
 .PHONY: all
 all: shellcat
 
@@ -36,13 +39,13 @@ shellcat: shellcat.c
 
 .PHONY: install
 install: shellcat
-	install -d $(DESTDIR)$(PREFIX)/bin
-	install -m755 $(<) $(DESTDIR)$(PREFIX)/bin/$(<)
+	install -d $(DESTDIR)$(bindir)
+	install -m755 $(<) $(DESTDIR)$(bindir)/
 ifeq "$(wildcard doc/*.1)" ""
 	# run "$(MAKE) -C doc" to build the manpage
 else
-	install -d $(DESTDIR)$(PREFIX)/share/man/man1
-	install -m644 doc/$(<).1 $(DESTDIR)$(PREFIX)/share/man/man1/$(<).1
+	install -d $(DESTDIR)$(mandir)/man1
+	install -m644 doc/$(<).1 $(DESTDIR)$(mandir)/man1/
 endif
 
 .PHONY: test check
