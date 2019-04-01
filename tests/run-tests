@@ -37,8 +37,7 @@ IFS=$ifs
 
 hr()
 {
-    printf '%60s' | tr ' ' "$1"
-    printf '\n'
+    printf '%60s\n' | tr ' ' "$1"
 }
 
 n_ok=0
