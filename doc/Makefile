@@ -30,7 +30,11 @@ shellcat.1: manpage.pod
 	mv $(@).tmp $(@)
 
 .PHONY: check
-check: check-pod
+check: check-changelog check-pod
+
+.PHONY: check-changelog
+check-changelog: changelog
+	dpkg-parsechangelog -l$(<) --all 2>&1 >/dev/null | { ! grep .; }
 
 .PHONY: check-pod
 check-pod: manpage.pod
