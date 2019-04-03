@@ -30,7 +30,10 @@ shellcat.1: manpage.pod
 	mv $(@).tmp $(@)
 
 .PHONY: check
-check: manpage.pod
+check: check-pod
+
+.PHONY: check-pod
+check-pod: manpage.pod
 	podchecker -warnings -warnings $(<)
 
 .PHONY: clean
