@@ -20,7 +20,6 @@
 
 version = $(shell IFS='()' read _ v _ < doc/changelog && echo $$v)
 
-CC ?= gcc
 CFLAGS ?= -g -O2
 CFLAGS += -Wall -Wformat -Wextra -pedantic
 CFLAGS += -D_FILE_OFFSET_BITS=64
