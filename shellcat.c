@@ -196,7 +196,7 @@ static void process_input(FILE *pipe, char **argv)
 #define sflush(newstate) \
     do { \
         if (buftail > bufhead && \
-            fwrite(bufhead, buftail - bufhead, 1, pipe) != 1) \
+            fwrite(bufhead, (size_t) (buftail - bufhead), 1, pipe) != 1) \
                 fail("fwrite"); \
         bufhead = buftail + 1; \
         state = newstate; \
