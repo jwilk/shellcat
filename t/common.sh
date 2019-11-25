@@ -1,3 +1,6 @@
+# Copyright © 2013-2019 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
 set -e -u
 
 base="${0%/*}/.."
