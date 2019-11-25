@@ -49,7 +49,7 @@ endif
 
 .PHONY: test check
 test check: shellcat
-	$(MAKE) -C tests
+	prove -v
 
 .PHONY: clean
 clean:

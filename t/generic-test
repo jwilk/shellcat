@@ -1,5 +1,5 @@
 #!/bin/sh
-. ./common.sh
+. ${0%/*}/common.sh
 
 run_shellcat
 

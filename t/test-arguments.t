@@ -1,7 +1,7 @@
 #!/bin/sh
-. ./common.sh
+. ${0%/*}/common.sh
 
-run_shellcat eggs "'bacon'" '
+run_shellcat 0 eggs "'bacon'" '
 s
 p
 a
