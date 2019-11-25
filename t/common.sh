@@ -1,6 +1,7 @@
 set -e -u
 
-shellcat=${shellcat:-${0%/*}/../shellcat}
+base="${0%/*}/.."
+shellcat=${SHELLCAT_TEST_TARGET:-"$base/shellcat"}
 shellcat_ifs=${shellcat_ifs:-$IFS}
 ifs=$IFS
 base="${0%.t}"
