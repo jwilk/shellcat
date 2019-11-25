@@ -10,7 +10,7 @@ addons:
 script:
 - cppcheck --error-exitcode=1 *.c
 - make
-- make check
+- make test
 - make -C doc
 - make -C doc check
 - make install PREFIX=~/.local

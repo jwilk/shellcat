@@ -47,8 +47,8 @@ else
 	install -m644 doc/$(<).1 $(DESTDIR)$(mandir)/man1/
 endif
 
-.PHONY: test check
-test check: shellcat
+.PHONY: test
+test: shellcat
 	prove -v
 
 .PHONY: test-installed
