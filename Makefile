@@ -51,6 +51,10 @@ endif
 test check: shellcat
 	prove -v
 
+.PHONY: test-installed
+test-installed: $(or $(shell command -v shellcat;),$(bindir)/shellcat)
+	SHELLCAT_TEST_TARGET=shellcat prove -v
+
 .PHONY: clean
 clean:
 	rm -f shellcat
