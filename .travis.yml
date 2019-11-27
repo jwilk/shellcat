@@ -14,6 +14,7 @@ script:
 - make -C doc
 - make -C doc check
 - make install PREFIX=~/.local
+- make clean
 - cd /
 - shellcat --help
 - export MANPATH=~/.local/share/man MANWIDTH=80
