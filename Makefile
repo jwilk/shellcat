@@ -58,7 +58,7 @@ test-installed: $(or $(shell command -v shellcat;),$(bindir)/shellcat)
 .PHONY: clean
 clean:
 	rm -f shellcat
-	cd t && rm -f *.err *.out *.tmp
+	cd ./t && rm -f *.err *.out *.tmp
 
 .error = GNU make is required
 
