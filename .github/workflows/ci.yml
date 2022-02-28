@@ -31,7 +31,8 @@ jobs:
       run:
         readlink -f /bin/sh
     - name: run tests
-      run:
+      run: |
+        perl -E 'say $SIG{PIPE} // DEFAULT'
         make test
     - name: install
       run: |
