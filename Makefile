@@ -47,13 +47,15 @@ else
 	install -m644 doc/$(<).1 $(DESTDIR)$(mandir)/man1/
 endif
 
+reset-SIGPIPE = perl -Mautodie -e '$$SIG{PIPE}="DEFAULT"; exec @ARGV'
+
 .PHONY: test
 test: shellcat
-	prove -v
+	$(reset-SIGPIPE) prove -v
 
 .PHONY: test-installed
 test-installed: $(or $(shell command -v shellcat;),$(bindir)/shellcat)
-	SHELLCAT_TEST_TARGET=shellcat prove -v
+	SHELLCAT_TEST_TARGET=shellcat $(reset-SIGPIPE) prove -v
 
 .PHONY: clean
 clean:
