@@ -49,7 +49,7 @@ run_shellcat()
         diag "$outdiff"
     elif [ $rc != $xrc ]
     then
-        echo not ok 1 "\$? = $rc, expected $xrc)"
+        echo not ok 1 "\$? = $rc, expected $xrc"
     else
         echo ok 1
     fi
