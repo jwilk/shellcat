@@ -1,0 +1,56 @@
+name: CI
+on:
+- push
+- pull_request
+jobs:
+  main:
+    strategy:
+      matrix:
+        os:
+        - ubuntu-18.04
+        - ubuntu-20.04
+        cc:
+        - gcc
+        - clang
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up APT
+      run: |
+        printf 'Apt::Install-Recommends "false";\n' | sudo tee -a /etc/apt/apt.conf
+        sudo apt-get update
+    - name: build
+      run: make
+    - name: build docs
+      run:
+        make -C doc
+    - name: checks docs
+      run:
+        make -C doc check
+    - name: check what /bin/sh points to
+      run:
+        readlink -f /bin/sh
+    - name: run tests
+      run:
+        make test
+    - name: install
+      run: |
+        make install PREFIX=~/.local
+    - name: clean
+      run: |
+        make clean
+    - name: run post-install tests
+      run: |
+        make test-installed
+        cd /
+        shellcat --version
+        shellcat --help
+        export MANPATH=/home/runner/.local/share/man MANWIDTH=80
+        man 1 shellcat | grep -A 10 -w SHELLCAT
+    - name: run cppcheck
+      if: matrix.cc == 'gcc'
+      run: |
+        sudo apt-get install cppcheck
+        cppcheck --error-exitcode=1 *.c
+
+# vim:ts=2 sts=2 sw=2 et
