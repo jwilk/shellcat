@@ -5,8 +5,6 @@ set -e -u
 
 base="${0%/*}/.."
 shellcat=${SHELLCAT_TEST_TARGET:-"$base/shellcat"}
-shellcat_ifs=${shellcat_ifs:-$IFS}
-ifs=$IFS
 base="${0%.t}"
 f_input="${base}.in"
 f_expected="${base}.xout"
@@ -25,7 +23,6 @@ EOF
 run_shellcat()
 {
     echo 1..1
-    IFS="$shellcat_ifs"
     if [ $# = 0 ]
     then
         xrc=0
@@ -34,7 +31,6 @@ run_shellcat()
         shift
     fi
     set -- $shellcat "$f_input" "$@"
-    IFS="$ifs"
     rc=0
     "$@" > "$f_output" 2>"$f_errors" || rc=$?
     outdiff=$(diff -u "$f_expected" "$f_output") || true
