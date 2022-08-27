@@ -47,7 +47,7 @@ else
 	install -m644 doc/$(<).1 $(DESTDIR)$(mandir)/man1/
 endif
 
-reset-SIGPIPE = perl -Mautodie -e '$$SIG{PIPE}="DEFAULT"; exec @ARGV'
+reset-SIGPIPE = perl -Mautodie=exec -e '$$SIG{PIPE}="DEFAULT"; exec @ARGV'
 
 .PHONY: test
 test: shellcat
