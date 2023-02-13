@@ -1,8 +1,19 @@
 shellcat (1.2.1) UNRELEASED; urgency=low
 
-  * 
+  * Refurbish the test suite.
+  * Improve the build system:
+    + Add checks against BSD make. (Only GNU make is supported.)
+    + Use “command -v” instead of which(1).
+    + Remove the “check” target. (Use “test” instead.)
+    + Add the “test-installed” target.
+    + Add the “bindir” and “mandir” variables.
+    + Don't set default CC=gcc.
+  * Improve the help message:
+    + Rephrase descriptions of --help, --version.
+    + Reduce indentation.
+  * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 18 Feb 2019 20:23:58 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 13 Feb 2023 09:47:13 +0100
 
 shellcat (1.2) unstable; urgency=low
 
