@@ -23,7 +23,7 @@ version = $(shell IFS='()' read _ v _ < changelog && echo $$v)
 .PHONY: all
 all: shellcat.1
 
-shellcat.1: manpage.pod
+shellcat.1: manpage.pod changelog
 	perl -p -e 's/L<([a-z_-]+)[(]([0-9]+)[)]>/B<\1>(\2)/g' $(<) \
 	| pod2man --utf8 -c '' -n SHELLCAT -r 'shellcat $(version)' \
 	> $(@).tmp
