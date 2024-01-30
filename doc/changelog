@@ -8,9 +8,7 @@ shellcat (1.2.1) UNRELEASED; urgency=low
     + Add the “test-installed” target.
     + Add the “bindir” and “mandir” variables.
     + Don't set default CC=gcc.
-  * Improve the help message:
-    + Rephrase descriptions of --help, --version.
-    + Reduce indentation.
+  * Refurbish the help message.
   * Improve error handling.
 
  -- Jakub Wilk <jwilk@jwilk.net>  Mon, 13 Feb 2023 09:47:13 +0100
