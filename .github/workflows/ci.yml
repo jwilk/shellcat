@@ -15,10 +15,6 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v4
-    - name: set up APT
-      run: |
-        printf 'Apt::Install-Recommends "false";\n' | sudo tee -a /etc/apt/apt.conf
-        sudo apt-get update
     - name: check C compiler version
       run:
         ${{matrix.cc}} --version
@@ -52,6 +48,11 @@ jobs:
         shellcat --help
         export MANPATH=~/.local/share/man MANWIDTH=80
         man 1 shellcat | grep -A 10 -w SHELLCAT
+    - name: set up APT
+      if: matrix.cc == 'gcc'
+      run: |
+        printf 'Apt::Install-Recommends "false";\n' | sudo tee -a /etc/apt/apt.conf
+        sudo apt-get update
     - name: run cppcheck
       if: matrix.cc == 'gcc'
       run: |
