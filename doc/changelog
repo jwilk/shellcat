@@ -1,4 +1,4 @@
-shellcat (1.2.1) UNRELEASED; urgency=low
+shellcat (1.2.1) unstable; urgency=low
 
   * Refurbish the test suite.
   * Improve the build system:
@@ -11,7 +11,7 @@ shellcat (1.2.1) UNRELEASED; urgency=low
   * Refurbish the help message.
   * Improve error handling.
 
- -- Jakub Wilk <jwilk@jwilk.net>  Mon, 13 Feb 2023 09:47:13 +0100
+ -- Jakub Wilk <jwilk@jwilk.net>  Tue, 30 Jan 2024 21:25:05 +0100
 
 shellcat (1.2) unstable; urgency=low
 
