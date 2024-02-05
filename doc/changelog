@@ -1,3 +1,9 @@
+shellcat (1.2.2) UNRELEASED; urgency=low
+
+  * 
+
+ -- Jakub Wilk <jwilk@jwilk.net>  Mon, 05 Feb 2024 18:38:25 +0100
+
 shellcat (1.2.1) unstable; urgency=low
 
   * Refurbish the test suite.
