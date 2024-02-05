@@ -1,4 +1,4 @@
-# Copyright © 2013-2019 Jakub Wilk <jwilk@jwilk.net>
+# Copyright © 2013-2024 Jakub Wilk <jwilk@jwilk.net>
 # SPDX-License-Identifier: MIT
 
 set -e -u
