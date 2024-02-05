@@ -3,8 +3,8 @@
 
 set -e -u
 
-base="${0%/*}/.."
-shellcat=${SHELLCAT_TEST_TARGET:-"$base/shellcat"}
+dir="${0%/*}/.."
+shellcat=${SHELLCAT_TEST_TARGET:-"$dir/shellcat"}
 base="${0%.t}"
 f_input="${base}.in"
 f_expected="${base}.xout"
